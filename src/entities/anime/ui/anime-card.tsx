@@ -1,5 +1,6 @@
 import { type Anime } from "../types";
 import { Card } from "../../../shared/ui/card/card";
+import { useFavorites } from "../../../shared/hooks/use-favorites";
 
 interface Props {
   anime: Anime;
@@ -7,6 +8,8 @@ interface Props {
 }
 
 export function AnimeCard({ anime, onClick }: Props) {
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   return (
     <Card>
       <div
@@ -31,6 +34,22 @@ export function AnimeCard({ anime, onClick }: Props) {
           <div>{anime.year ?? "—"}</div>
         </div>
       </div>
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleFavorite(anime.mal_id);
+        }}
+        style={{
+          marginLeft: "auto",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          fontSize: 18,
+        }}
+      >
+        {isFavorite(anime.mal_id) ? "⭐" : "☆"}
+      </button>
     </Card>
   );
 }

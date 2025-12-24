@@ -1,5 +1,5 @@
-import { http } from '../../shared/api/http';
-import { type Anime } from './types';
+import { http } from "../../shared/api/http";
+import { type Anime } from "./types";
 
 interface AnimeListResponse {
   data: Anime[];
@@ -15,4 +15,10 @@ export function getAnimeList(page = 1) {
 
 export function getAnimeById(id: number) {
   return http<{ data: Anime }>(`/anime/${id}`);
+}
+
+export function searchAnime(query: string, page = 1) {
+  return http<AnimeListResponse>(
+    `/anime?q=${encodeURIComponent(query)}&page=${page}`
+  );
 }

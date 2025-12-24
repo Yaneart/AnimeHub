@@ -1,9 +1,26 @@
-import { useNavigate } from 'react-router-dom';
-import { useAnimeList } from '../../entities/anime/hooks';
-import { Loader } from '../../shared/ui/loader/loader';
-import { AnimeCard } from '../../entities/anime/ui/anime-card';
+import { useNavigate } from "react-router-dom";
+import { useAnimeList, useAnimeSearch } from "../../entities/anime/hooks";
+import { AnimeCard } from "../../entities/anime/ui/anime-card";
+import { useState } from "react";
+import { useDebounce } from "../../shared/hooks/use-debounce";
+import { AnimeCardSkeleton } from "../../entities/anime/ui/anime-card-skeleton";
+import { useFavorites } from "../../shared/hooks/use-favorites";
+import { useInfiniteScroll } from "../../shared/hooks/use-infinite-scroll";
 
 export function AnimeListPage() {
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
+
+  const isSearching = debouncedSearch.length > 2;
+
+  const listQuery = useAnimeList(!isSearching);
+  const searchQuery = useAnimeSearch(debouncedSearch);
+
+  const query = isSearching ? searchQuery : listQuery;
+
+  const { favorites } = useFavorites();
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+
   const {
     data,
     fetchNextPage,
@@ -11,30 +28,96 @@ export function AnimeListPage() {
     isFetchingNextPage,
     isLoading,
     isError,
-  } = useAnimeList();
+  } = query;
+
+  const loadMoreRef = useInfiniteScroll({
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  });
 
   const navigate = useNavigate();
 
-  if (isLoading) return <Loader />;
+  if (isLoading) {
+    return (
+      <div style={{ padding: 16 }}>
+        <h1>Anime list</h1>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+            gap: 12,
+          }}
+        >
+          {Array.from({ length: 8 }).map((_, i) => (
+            <AnimeCardSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
+  }
   if (isError) return <div>Error 😢</div>;
 
   return (
     <div>
       <h1>Anime list</h1>
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search anime..."
+        style={{
+          padding: 8,
+          width: "100%",
+          maxWidth: 400,
+          marginBottom: 16,
+        }}
+      />
+
+      <button
+        onClick={() => setShowOnlyFavorites((prev) => !prev)}
+        style={{
+          marginBottom: 16,
+          padding: "6px 12px",
+          cursor: "pointer",
+        }}
+      >
+        {showOnlyFavorites ? "Показать все" : "⭐ Показать избранное"}
+      </button>
 
       <ul>
-        {data?.pages.map(page =>
-          page.data.map(anime => (
-            <AnimeCard key={anime.mal_id} anime={anime} onClick={() => navigate(`/anime/${anime.mal_id}`)}/>
-          ))
+        {data?.pages.map((page) =>
+          page.data
+            .filter((anime) =>
+              showOnlyFavorites ? favorites.includes(anime.mal_id) : true
+            )
+            .map((anime) => (
+              <AnimeCard
+                key={anime.mal_id}
+                anime={anime}
+                onClick={() => navigate(`/anime/${anime.mal_id}`)}
+              />
+            ))
         )}
       </ul>
 
-      {hasNextPage && (
-        <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-          {isFetchingNextPage ? 'Loading more...' : 'Load more'}
-        </button>
-      )}
+      {!showOnlyFavorites &&
+        hasNextPage &&
+        (isFetchingNextPage ? (
+          <div
+            style={{
+              marginTop: 12,
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+              gap: 12,
+            }}
+          >
+            {Array.from({ length: 4 }).map((_, i) => (
+              <AnimeCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : (
+          <div ref={loadMoreRef} style={{ height: 1 }} />
+        ))}
     </div>
   );
 }
