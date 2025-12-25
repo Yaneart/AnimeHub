@@ -1,12 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getFavorites, saveFavorites } from "../lib/favorites";
 
 export function useFavorites() {
-  const [favorites, setFavorites] = useState<number[]>([]);
-
-  useEffect(() => {
-    setFavorites(getFavorites());
-  }, []);
+  const [favorites, setFavorites] = useState<number[]>(() => getFavorites());
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) => {

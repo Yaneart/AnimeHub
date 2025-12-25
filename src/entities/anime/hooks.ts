@@ -1,5 +1,6 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
 import { getAnimeById, getAnimeList, searchAnime } from "./api";
+import type { Anime } from "./types";
 
 export function useAnimeList(enabled = true) {
   return useInfiniteQuery({
@@ -35,4 +36,23 @@ export function useAnimeSearch(query: string) {
         : undefined;
     },
   });
+}
+
+export function useFavoritesAnime(ids: number[]) {
+  const queries = useQueries({
+    queries: ids.map((id) => ({
+      queryKey: ["anime", id],
+      queryFn: () => getAnimeById(id),
+      enabled: !!id,
+    })),
+  });
+
+  const isloading = queries.some((q) => q.isLoading);
+  const isError = queries.some((q) => q.isError);
+
+  const AnimeList: Anime[] = queries
+    .map((q) => q.data?.data)
+    .filter(Boolean) as Anime[];
+
+  return { AnimeList, isloading, isError };
 }

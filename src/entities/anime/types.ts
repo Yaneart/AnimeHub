@@ -12,3 +12,9 @@ export interface Anime {
   score: number | null;
   year: number | null;
 }
+
+export interface AnimeFilters {
+  query?: string;
+  year?: number;
+  minScore?: number;
+}

@@ -4,11 +4,16 @@ import { AnimeCard } from "../../entities/anime/ui/anime-card";
 import { useState } from "react";
 import { useDebounce } from "../../shared/hooks/use-debounce";
 import { AnimeCardSkeleton } from "../../entities/anime/ui/anime-card-skeleton";
-import { useFavorites } from "../../shared/hooks/use-favorites";
 import { useInfiniteScroll } from "../../shared/hooks/use-infinite-scroll";
+import { useFavoritesStore } from "../../shared/store/favorites.store";
 
 export function AnimeListPage() {
   const [search, setSearch] = useState("");
+
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+
+  const navigate = useNavigate();
+
   const debouncedSearch = useDebounce(search);
 
   const isSearching = debouncedSearch.length > 2;
@@ -18,8 +23,8 @@ export function AnimeListPage() {
 
   const query = isSearching ? searchQuery : listQuery;
 
-  const { favorites } = useFavorites();
-  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  const favorites = useFavoritesStore((s) => s.favorites);
+
 
   const {
     data,
@@ -34,9 +39,8 @@ export function AnimeListPage() {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
+    enabled: !showOnlyFavorites,
   });
-
-  const navigate = useNavigate();
 
   if (isLoading) {
     return (

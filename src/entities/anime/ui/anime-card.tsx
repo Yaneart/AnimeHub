@@ -1,6 +1,6 @@
 import { type Anime } from "../types";
 import { Card } from "../../../shared/ui/card/card";
-import { useFavorites } from "../../../shared/hooks/use-favorites";
+import { useFavoritesStore } from "../../../shared/store/favorites.store";
 
 interface Props {
   anime: Anime;
@@ -8,7 +8,8 @@ interface Props {
 }
 
 export function AnimeCard({ anime, onClick }: Props) {
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
+  const isFavorite = useFavoritesStore((s) => s.isFavorite);
 
   return (
     <Card>
