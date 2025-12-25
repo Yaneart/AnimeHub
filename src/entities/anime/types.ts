@@ -13,7 +13,8 @@ export interface Anime {
   year: number | null;
 }
 
-export interface AnimeFilters {
+export interface GetAnimeListParams {
+  page: number;
   query?: string;
   year?: number;
   minScore?: number;

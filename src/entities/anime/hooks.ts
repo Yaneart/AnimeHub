@@ -2,17 +2,25 @@ import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
 import { getAnimeById, getAnimeList, searchAnime } from "./api";
 import type { Anime } from "./types";
 
-export function useAnimeList(enabled = true) {
+export function useAnimeCatalog(params: {
+  query?: string;
+  year?: number;
+  minScore?: number;
+}) {
   return useInfiniteQuery({
-    queryKey: ["anime", "list"],
+    queryKey: ["anime", "catalog", params],
     initialPageParam: 1,
-    enabled,
-    queryFn: ({ pageParam = 1 }) => getAnimeList(pageParam),
-    getNextPageParam: (lastPage) => {
-      return lastPage.pagination.has_next_page
+    queryFn: ({ pageParam }) =>
+      getAnimeList({
+        page: pageParam,
+        query: params.query,
+        year: params.year,
+        minScore: params.minScore,
+      }),
+    getNextPageParam: (lastPage) =>
+      lastPage.pagination.has_next_page
         ? lastPage.pagination.current_page + 1
-        : undefined;
-    },
+        : undefined,
   });
 }
 
@@ -21,20 +29,6 @@ export function useAnimeById(id: number) {
     queryKey: ["anime", id],
     queryFn: () => getAnimeById(id),
     enabled: !!id,
-  });
-}
-
-export function useAnimeSearch(query: string) {
-  return useInfiniteQuery({
-    queryKey: ["anime", "search", query],
-    initialPageParam: 1,
-    queryFn: ({ pageParam = 1 }) => searchAnime(query, pageParam),
-    enabled: query.length > 2,
-    getNextPageParam: (lastPage) => {
-      return lastPage.pagination.has_next_page
-        ? lastPage.pagination.current_page + 1
-        : undefined;
-    },
   });
 }
 

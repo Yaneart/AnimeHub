@@ -1,30 +1,31 @@
 import { useNavigate } from "react-router-dom";
-import { useAnimeList, useAnimeSearch } from "../../entities/anime/hooks";
 import { AnimeCard } from "../../entities/anime/ui/anime-card";
 import { useState } from "react";
 import { useDebounce } from "../../shared/hooks/use-debounce";
 import { AnimeCardSkeleton } from "../../entities/anime/ui/anime-card-skeleton";
 import { useInfiniteScroll } from "../../shared/hooks/use-infinite-scroll";
 import { useFavoritesStore } from "../../shared/store/favorites.store";
+import { useAnimeCatalog } from "../../entities/anime/hooks";
 
 export function AnimeListPage() {
   const [search, setSearch] = useState("");
 
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
 
+  const [year, setYear] = useState<number | null>(null);
+  const [minScore, setMinScore] = useState<number | null>(null);
+
   const navigate = useNavigate();
 
   const debouncedSearch = useDebounce(search);
 
-  const isSearching = debouncedSearch.length > 2;
-
-  const listQuery = useAnimeList(!isSearching);
-  const searchQuery = useAnimeSearch(debouncedSearch);
-
-  const query = isSearching ? searchQuery : listQuery;
+  const query = useAnimeCatalog({
+    query: debouncedSearch.length > 2 ? debouncedSearch : undefined,
+    year: year ?? undefined,
+    minScore: minScore ?? undefined,
+  });
 
   const favorites = useFavoritesStore((s) => s.favorites);
-
 
   const {
     data,
@@ -76,6 +77,39 @@ export function AnimeListPage() {
           marginBottom: 16,
         }}
       />
+
+      <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+        <select
+          value={year ?? ""}
+          onChange={(e) =>
+            setYear(e.target.value ? Number(e.target.value) : null)
+          }
+        >
+          <option value="">Все годы</option>
+          {Array.from({ length: 30 }, (_, i) => {
+            const y = new Date().getFullYear() - i;
+            return (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
+      <select
+        value={minScore ?? ""}
+        onChange={(e) =>
+          setMinScore(e.target.value ? Number(e.target.value) : null)
+        }
+      >
+        <option value="">Любой рейтинг</option>
+        {[9, 8, 7, 6, 5].map((score) => (
+          <option key={score} value={score}>
+            от {score}
+          </option>
+        ))}
+      </select>
 
       <button
         onClick={() => setShowOnlyFavorites((prev) => !prev)}

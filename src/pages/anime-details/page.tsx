@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useAnimeById } from "../../entities/anime/hooks";
 import { Skeleton } from "../../shared/ui/skeleton/skeleton";
-import { useFavorites } from "../../shared/hooks/use-favorites";
+import { useFavoritesStore } from "../../shared/store/favorites.store";
 
 export function AnimeDetailsPage() {
   const { id } = useParams();
@@ -10,7 +10,8 @@ export function AnimeDetailsPage() {
   const animeId = Number(id);
   const { data, isLoading, isError } = useAnimeById(animeId);
 
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const isFavorite = useFavoritesStore((s) => s.isFavorite);
+const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
 
   if (isLoading) {
     return (
