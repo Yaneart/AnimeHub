@@ -4,17 +4,13 @@ import { Skeleton } from "../../../shared/ui/skeleton/skeleton";
 export function AnimeCardSkeleton() {
   return (
     <Card>
-      <div style={{ display: 'flex', gap: 12 }}>
-        <Skeleton width={80} height={110} borderRadius={4} />
+      <div className="flex gap-4">
+        <Skeleton width={80} height={110} />
 
-        <div style={{ flex: 1 }}>
+        <div className="flex-1 space-y-2">
           <Skeleton height={18} />
-          <div style={{ marginTop: 8 }}>
-            <Skeleton width={60} />
-          </div>
-          <div style={{ marginTop: 6 }}>
-            <Skeleton width={40} />
-          </div>
+          <Skeleton width={60} />
+          <Skeleton width={40} />
         </div>
       </div>
     </Card>

@@ -1,4 +1,4 @@
-const BASE_URL = 'https://api.jikan.moe/v4';
+const BASE_URL = "https://api.jikan.moe/v4";
 
 export async function http<T>(
   endpoint: string,
@@ -7,7 +7,7 @@ export async function http<T>(
   const response = await fetch(`${BASE_URL}${endpoint}`, options);
 
   if (!response.ok) {
-    throw new Error('API error');
+    throw new Error("API error");
   }
 
   return response.json();

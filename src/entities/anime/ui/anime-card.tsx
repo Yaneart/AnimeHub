@@ -15,7 +15,7 @@ export function AnimeCard({ anime, onClick }: Props) {
     <Card>
       <div
         onClick={onClick}
-        style={{ cursor: "pointer", display: "flex", gap: 12 }}
+        className="flex cursor-pointer gap-4 transition hover:bg-slate-50"
       >
         <img
           loading="lazy"
@@ -26,13 +26,15 @@ export function AnimeCard({ anime, onClick }: Props) {
           alt={anime.title}
           width={80}
           height={110}
-          style={{ objectFit: "cover", borderRadius: 4 }}
+          className="h-28 w-20 shrink-0 rounded-md object-cover"
         />
 
-        <div>
-          <h3 style={{ margin: "0 0 4px" }}>{anime.title}</h3>
-          <div>⭐ {anime.score ?? "—"}</div>
-          <div>{anime.year ?? "—"}</div>
+        <div className="flex-1">
+          <h3 className="mb-1 line-clamp-2 text-base font-semibold">
+            {anime.title}
+          </h3>
+          <div className="text-sm text-slate-600">⭐ {anime.score ?? "—"}</div>
+          <div className="text-sm text-slate-500">{anime.year ?? "—"}</div>
         </div>
       </div>
 

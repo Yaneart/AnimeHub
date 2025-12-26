@@ -11,13 +11,11 @@ export function Skeleton({
 }: Props) {
   return (
     <div
+      className="animate-pulse bg-slate-900"
       style={{
         width,
         height,
         borderRadius,
-        background: "linear-gradient(90deg, #eee,rgb(91, 13, 13), #eee)",
-        backgroundSize: "200% 100%",
-        animation: "skeleton 1.2s ease-in-out infinite",
       }}
     />
   );

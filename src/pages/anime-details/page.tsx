@@ -11,7 +11,7 @@ export function AnimeDetailsPage() {
   const { data, isLoading, isError } = useAnimeById(animeId);
 
   const isFavorite = useFavoritesStore((s) => s.isFavorite);
-const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
+  const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
 
   if (isLoading) {
     return (

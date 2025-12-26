@@ -1,15 +1,8 @@
-import { type ReactNode } from 'react';
+import { type ReactNode } from "react";
 
 export function Card({ children }: { children: ReactNode }) {
   return (
-    <div
-      style={{
-        border: '1px solid #e5e7eb',
-        borderRadius: 8,
-        padding: 12,
-        background: '#fff',
-      }}
-    >
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
       {children}
     </div>
   );

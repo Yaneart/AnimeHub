@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
-import { getAnimeById, getAnimeList, searchAnime } from "./api";
+import { getAnimeById, getAnimeList } from "./api";
 import type { Anime } from "./types";
 
 export function useAnimeCatalog(params: {

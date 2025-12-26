@@ -6,7 +6,6 @@ import { useFavoritesStore } from "../../shared/store/favorites.store";
 export function FavoritesPage() {
   const favorites = useFavoritesStore((s) => s.favorites);
 
-
   const { isError, isloading, AnimeList } = useFavoritesAnime(favorites);
 
   const navigate = useNavigate();
