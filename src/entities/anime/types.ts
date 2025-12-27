@@ -9,8 +9,15 @@ export interface Anime {
       large_image_url: string;
     };
   };
+
   score: number | null;
   year: number | null;
+
+  trailer?: {
+    youtube_id?: string | null;
+    url?: string | null;
+    embed_url?: string | null;
+  };
 }
 
 export interface GetAnimeListParams {

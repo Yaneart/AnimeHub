@@ -8,6 +8,7 @@ import {
   getAnimeById,
   getAnimeGenres,
   getAnimeList,
+  getAnimePictures,
   getRandomAnime,
   getRandomAnimeByFilter,
 } from "./api/api";
@@ -22,8 +23,7 @@ export function useAnimeCatalog(filters: AnimeFilters) {
   return useInfiniteQuery({
     queryKey: ["anime", "catalog", { ...filters, genres: stableGenres }],
     initialPageParam: 1,
-    queryFn: ({ pageParam }) =>
-      getAnimeList({ ...filters, page: pageParam }),
+    queryFn: ({ pageParam }) => getAnimeList({ ...filters, page: pageParam }),
     getNextPageParam: (lastPage) =>
       lastPage.pagination.has_next_page
         ? lastPage.pagination.current_page + 1
@@ -112,6 +112,15 @@ export function useAnimeGenres() {
   return useQuery({
     queryKey: ["anime-genres"],
     queryFn: getAnimeGenres,
+    staleTime: 1000 * 60 * 60,
+  });
+}
+
+export function useAnimePictures(id: number) {
+  return useQuery({
+    queryKey: ["anime", id, "pictures"],
+    queryFn: () => getAnimePictures(id),
+    enabled: !!id,
     staleTime: 1000 * 60 * 60,
   });
 }
