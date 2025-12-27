@@ -10,50 +10,52 @@ export function AnimeDetailsPage() {
   const animeId = Number(id);
   const { data, isLoading, isError } = useAnimeById(animeId);
 
-  const isFavorite = useFavoritesStore((s) => s.isFavorite);
+  const favorites = useFavoritesStore((s) => s.favorites);
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
 
   if (isLoading) {
     return (
-      <div style={{ padding: 16 }}>
+      <div className="p-16">
         <Skeleton width={200} height={300} borderRadius={8} />
-        <div style={{ marginTop: 16 }}>
+        <div className="mt-16">
           <Skeleton width={300} height={28} />
         </div>
-        <div style={{ marginTop: 8 }}>
+        <div className="mt-8">
           <Skeleton width={120} />
         </div>
       </div>
     );
   }
+
   if (isError || !data) return <div>Error 😢</div>;
 
   const anime = data.data;
+  const isFav = favorites.includes(anime.mal_id);
 
   return (
-    <div style={{ padding: 16 }}>
+    <>
       <button onClick={() => navigate(-1)}>← Back</button>
 
-      <div style={{ display: "flex", gap: 16, marginTop: 16 }}>
-        <img
-          src={anime.images.jpg.large_image_url}
-          alt={anime.title}
-          width={200}
-          style={{ borderRadius: 8 }}
-        />
+      <div className="flex p-16">
+        <div className="my-8 flex gap-8">
+          <img
+            src={anime.images.jpg.large_image_url}
+            alt={anime.title}
+            width={200}
+            className="rounded-md"
+          />
 
-        <div>
-          <h1>{anime.title}</h1>
-          <div>⭐ {anime.score ?? "—"}</div>
-          <div>Year: {anime.year ?? "—"}</div>
+          <div className="flex flex-col gap-4">
+            <h1>{anime.title}</h1>
+            <div>⭐ {anime.score ?? "—"}</div>
+            <div>Year: {anime.year ?? "—"}</div>
+          </div>
         </div>
-      </div>
 
-      <button onClick={() => toggleFavorite(anime.mal_id)}>
-        {isFavorite(anime.mal_id)
-          ? "⭐ Remove from favorites"
-          : "☆ Add to favorites"}
-      </button>
-    </div>
+        <button onClick={() => toggleFavorite(anime.mal_id)}>
+          {isFav ? "⭐ Удлаить из избранных" : "☆ Добавить в избранные"}
+        </button>
+      </div>
+    </>
   );
 }

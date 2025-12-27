@@ -15,7 +15,7 @@ export function AnimeCard({ anime, onClick }: Props) {
     <Card>
       <div
         onClick={onClick}
-        className="flex cursor-pointer gap-4 transition hover:bg-slate-50"
+        className="flex cursor-pointer gap-10"
       >
         <img
           loading="lazy"

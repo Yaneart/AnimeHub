@@ -1,22 +1,29 @@
-import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
-import { getAnimeById, getAnimeList } from "./api";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueries,
+  useQuery,
+} from "@tanstack/react-query";
+import {
+  getAnimeById,
+  getAnimeGenres,
+  getAnimeList,
+  getRandomAnime,
+  getRandomAnimeByFilter,
+} from "./api/api";
 import type { Anime } from "./types";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import type { AnimeFilters } from "./model/filters";
 
-export function useAnimeCatalog(params: {
-  query?: string;
-  year?: number;
-  minScore?: number;
-}) {
+export function useAnimeCatalog(filters: AnimeFilters) {
+  const stableGenres = filters.genres?.slice().sort();
+
   return useInfiniteQuery({
-    queryKey: ["anime", "catalog", params],
+    queryKey: ["anime", "catalog", { ...filters, genres: stableGenres }],
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
-      getAnimeList({
-        page: pageParam,
-        query: params.query,
-        year: params.year,
-        minScore: params.minScore,
-      }),
+      getAnimeList({ ...filters, page: pageParam }),
     getNextPageParam: (lastPage) =>
       lastPage.pagination.has_next_page
         ? lastPage.pagination.current_page + 1
@@ -41,12 +48,70 @@ export function useFavoritesAnime(ids: number[]) {
     })),
   });
 
-  const isloading = queries.some((q) => q.isLoading);
+  const isLoading = queries.some((q) => q.isLoading);
   const isError = queries.some((q) => q.isError);
 
   const AnimeList: Anime[] = queries
     .map((q) => q.data?.data)
     .filter(Boolean) as Anime[];
 
-  return { AnimeList, isloading, isError };
+  return { AnimeList, isLoading, isError };
+}
+
+export function useRandomAnime() {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: getRandomAnime,
+    onMutate: () => {
+      toast.loading("Ищем случайное аниме...", { id: "random-anime" });
+    },
+    onSuccess: (response) => {
+      toast.success("Вот ваше случайное аниме!", { id: "random-anime" });
+      const id = response.data.mal_id;
+      navigate(`/anime/${id}`);
+    },
+    onError: () => {
+      toast.error("Не удалось загрузить случайное аниме.", {
+        id: "random-anime",
+      });
+    },
+  });
+}
+
+export function useRandomAnimeByFilters(params: {
+  year?: number;
+  minScore?: number;
+  query?: string;
+  genres?: number[];
+}) {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: () => getRandomAnimeByFilter(params),
+    onMutate: () => {
+      toast.loading("Ищем случайное аниме по фильтрам...", {
+        id: "random-anime-filters",
+      });
+    },
+    onSuccess: (response) => {
+      toast.success("Вот ваше случайное аниме по фильтрам!", {
+        id: "random-anime-filters",
+      });
+      navigate(`/anime/${response.mal_id}`);
+    },
+    onError: () => {
+      toast.error("Не удалось загрузить случайное аниме по фильтрам.", {
+        id: "random-anime-filters",
+      });
+    },
+  });
+}
+
+export function useAnimeGenres() {
+  return useQuery({
+    queryKey: ["anime-genres"],
+    queryFn: getAnimeGenres,
+    staleTime: 1000 * 60 * 60,
+  });
 }

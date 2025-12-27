@@ -21,6 +21,7 @@
 - React Router
 - TanStack React Query
 - Zustand
+- Tailwind
 - Vite
 
 ## 🧩 Архитектура
