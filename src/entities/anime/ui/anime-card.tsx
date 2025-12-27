@@ -13,10 +13,7 @@ export function AnimeCard({ anime, onClick }: Props) {
 
   return (
     <Card>
-      <div
-        onClick={onClick}
-        className="flex cursor-pointer gap-10"
-      >
+      <div onClick={onClick} className="flex cursor-pointer gap-10">
         <img
           loading="lazy"
           src={
@@ -39,17 +36,12 @@ export function AnimeCard({ anime, onClick }: Props) {
       </div>
 
       <button
+        aria-label="toggle favorite"
         onClick={(e) => {
           e.stopPropagation();
           toggleFavorite(anime.mal_id);
         }}
-        style={{
-          marginLeft: "auto",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          fontSize: 18,
-        }}
+        className="ml-auto text-xl transition hover:scale-110"
       >
         {isFavorite(anime.mal_id) ? "⭐" : "☆"}
       </button>

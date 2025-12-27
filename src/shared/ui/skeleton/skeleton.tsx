@@ -11,7 +11,7 @@ export function Skeleton({
 }: Props) {
   return (
     <div
-      className="animate-pulse bg-slate-900"
+      className="animate-pulse bg-slate-200 dark:bg-slate-700"
       style={{
         width,
         height,
