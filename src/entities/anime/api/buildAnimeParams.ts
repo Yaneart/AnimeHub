@@ -1,11 +1,19 @@
+import type { OrderBy, Sort } from "../../../pages/anime-filters/AnimeFilters";
+import type { AnimeStatus, AnimeType } from "../../../shared/types/anime-filters";
+
 export function buildAnimeParams(params: {
   page: number;
   query?: string;
   year?: number;
   minScore?: number;
   genres?: number[];
-  orderBy?: string;
-  sort?: string;
+  orderBy?: OrderBy;
+  sort?: Sort;
+  status?: AnimeStatus;
+  type?: AnimeType;
+  minEpisodes?: number;
+  maxEpisodes?: number;
+  sfw?: boolean;
 }) {
   const search = new URLSearchParams({
     page: String(params.page),
@@ -23,6 +31,35 @@ export function buildAnimeParams(params: {
 
   if (params.orderBy) search.set("order_by", params.orderBy);
   if (params.sort) search.set("sort", params.sort);
+
+  if (params.status) {
+    search.set("status", params.status);
+  }
+  
+  if (params.type) {
+    search.set("type", params.type);
+  }
+  
+  if (params.minEpisodes) {
+    search.set("min_episodes", String(params.minEpisodes));
+  }
+  
+  if (params.maxEpisodes) {
+    search.set("max_episodes", String(params.maxEpisodes));
+  }
+  
+  if (params.sfw === true) {
+    search.set("sfw", "true");
+  }
+
+  if ((params.minEpisodes || params.maxEpisodes) && !params.type) {
+    search.set("type", "tv");
+  }
+  
+  if ((params.minEpisodes || params.maxEpisodes) && !params.status) {
+    search.set("status", "complete");
+  }
+  
 
   return search.toString();
 }

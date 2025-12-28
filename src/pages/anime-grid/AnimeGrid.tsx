@@ -32,9 +32,9 @@ export function AnimeGrid({
   return (
     <>
       <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">
-        {animeList.map((anime) => (
+        {animeList.map((anime, index) => (
           <AnimeCard
-            key={anime.mal_id}
+            key={`${anime.mal_id}-${index}`}
             anime={anime}
             onClick={() => {
               saveScrollPosition();

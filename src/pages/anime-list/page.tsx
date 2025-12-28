@@ -21,6 +21,11 @@ export function AnimeListPage() {
     genres,
     orderBy,
     sort,
+    status,
+    type,
+    minEpisodesInput,
+    maxEpisodesInput,
+    sfw,
 
     setSearch,
     setYear,
@@ -28,6 +33,11 @@ export function AnimeListPage() {
     setGenres,
     setOrderBy,
     setSort,
+    setStatus,
+    setType,
+    setMinEpisodesInput,
+    setMaxEpisodesInput,
+    setSfw,
 
     resetFilters,
     filters,
@@ -56,7 +66,9 @@ export function AnimeListPage() {
     );
   }
 
-  <ErrorState message="Не удалось загрузить данные 😢" />;
+  if (isError) {
+    return <ErrorState message="Не удалось загрузить данные 😢" />;
+  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 text-slate-900 dark:text-slate-100">
@@ -71,12 +83,22 @@ export function AnimeListPage() {
         genres={genres}
         orderBy={orderBy}
         sort={sort}
+        status={status}
+        type={type}
+        minEpisodesInput={minEpisodesInput}
+        maxEpisodesInput={maxEpisodesInput}
+        sfw={sfw}
         setSearch={setSearch}
         setYear={setYear}
         setMinScore={setMinScore}
         setGenres={setGenres}
         setOrderBy={setOrderBy}
         setSort={setSort}
+        setStatus={setStatus}
+        setType={setType}
+        setMinEpisodesInput={setMinEpisodesInput}
+        setMaxEpisodesInput={setMaxEpisodesInput}
+        setSfw={setSfw}
         resetFilters={resetFilters}
         onRandom={randomByFilters}
         isRandomPending={isRandomPending}
