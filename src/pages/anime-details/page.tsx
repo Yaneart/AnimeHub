@@ -115,7 +115,18 @@ export function AnimeDetailsPage() {
         />
       )}
 
-      {pictures.length > 0 && <AnimePictures pictures={pictures.slice(0, 8)} />}
+      {isPicturesLoading && (
+        <div className="grid grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} height={120} borderRadius={12} />
+          ))}
+        </div>
+      )}
+
+      {!isPicturesLoading && pictures.length > 0 && (
+        <AnimePictures pictures={pictures.slice(0, 8)} />
+      )}
+
       {!isRecLoading && recommendations.length > 0 && (
         <AnimeRecommendations list={recommendations.slice(0, 10)} />
       )}
