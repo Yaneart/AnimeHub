@@ -1,5 +1,5 @@
 import { http } from "../../../shared/api/http";
-import { type Anime } from "../types";
+import { type Anime, type GetAnimeListParams } from "../types";
 import { type AnimeFilters } from "../model/filters";
 import { buildAnimeParams } from "./buildAnimeParams";
 
@@ -11,9 +11,18 @@ interface AnimeListResponse {
   };
 }
 
-export function getAnimeList(filters: AnimeFilters & { page: number }) {
-  const query = buildAnimeParams(filters);
-  return http<AnimeListResponse>(`/anime?${query}`);
+interface RecommendationResponse {
+  data: {
+    entry: Anime;
+  }[];
+}
+
+export function getAnimeList(params: GetAnimeListParams) {
+  return http<AnimeListResponse>(`/anime?${buildAnimeParams(params)}`);
+}
+
+export function getAnimeRecommendations(id: number) {
+  return http<RecommendationResponse>(`/anime/${id}/recommendations`);
 }
 
 export function getAnimeById(id: number) {

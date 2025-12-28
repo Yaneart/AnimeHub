@@ -10,9 +10,13 @@ export function Button({
   ...props
 }: Props) {
   const base = `
-    rounded-lg border px-4 py-2 transition
-    disabled:opacity-50
-  `;
+  rounded-lg border px-4 py-2
+  transition-all duration-150
+  active:scale-95
+  focus-visible:outline-none
+  focus-visible:ring-2 focus-visible:ring-slate-400
+  disabled:opacity-50
+`;
 
   const variants = {
     default: `

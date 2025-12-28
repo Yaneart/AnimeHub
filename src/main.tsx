@@ -10,10 +10,20 @@ import { ThemeProvider } from "./shared/theme/theme-provider.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider>
-    <QueryProvider>
-      <RouterProvider router={router} />
-      <Toaster position="top-center" />
-    </QueryProvider>
+      <QueryProvider>
+        <RouterProvider router={router} />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 2000,
+            style: {
+              borderRadius: "12px",
+              background: "#020617",
+              color: "#f8fafc",
+            },
+          }}
+        />
+      </QueryProvider>
     </ThemeProvider>
   </StrictMode>
 );

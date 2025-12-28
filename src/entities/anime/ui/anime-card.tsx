@@ -1,6 +1,7 @@
 import { type Anime } from "../types";
 import { Card } from "../../../shared/ui/card/card";
 import { useFavoritesStore } from "../../../shared/store/favorites.store";
+import toast from "react-hot-toast";
 
 interface Props {
   anime: Anime;
@@ -9,11 +10,14 @@ interface Props {
 
 export function AnimeCard({ anime, onClick }: Props) {
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
-  const isFavorite = useFavoritesStore((s) => s.isFavorite);
+  const isFavorite = useFavoritesStore((s) => s.isFavorite(anime.mal_id));
 
   return (
     <Card>
-      <div onClick={onClick} className="flex cursor-pointer gap-10">
+      <div
+        onClick={onClick}
+        className="animate-fade-scale relative flex w-full gap-4 text-left focus-visible:outline-none"
+      >
         <img
           loading="lazy"
           src={
@@ -21,30 +25,46 @@ export function AnimeCard({ anime, onClick }: Props) {
             anime.images.jpg.large_image_url
           }
           alt={anime.title}
-          width={80}
-          height={110}
           className="h-28 w-20 shrink-0 rounded-md object-cover"
         />
 
-        <div className="flex-1">
-          <h3 className="mb-1 line-clamp-2 text-base font-semibold">
+        <div className="flex flex-1 flex-col gap-1">
+          <h3 className="line-clamp-2 text-base font-semibold">
             {anime.title}
           </h3>
-          <div className="text-sm text-slate-600">⭐ {anime.score ?? "—"}</div>
-          <div className="text-sm text-slate-500">{anime.year ?? "—"}</div>
-        </div>
-      </div>
 
-      <button
-        aria-label="toggle favorite"
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleFavorite(anime.mal_id);
-        }}
-        className="ml-auto text-xl transition hover:scale-110"
-      >
-        {isFavorite(anime.mal_id) ? "⭐" : "☆"}
-      </button>
+          <div className="text-sm text-slate-600 dark:text-slate-400">
+            ⭐ {anime.score ?? "—"}
+          </div>
+
+          <div className="text-sm text-slate-500 dark:text-slate-500">
+            {anime.year ?? "—"}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          aria-label="toggle favorite"
+          onClick={(e) => {
+            e.stopPropagation();
+
+            const added = !isFavorite;
+            toggleFavorite(anime.mal_id);
+
+            toast.dismiss("favorite");
+
+            toast.success(
+              added ? "⭐ Добавлено в избранное" : "☆ Удалено из избранного",
+              {
+                id: "favorite",
+              }
+            );
+          }}
+          className={`absolute top-10 right-2 text-xl transition-transform hover:scale-125 ${isFavorite ? "animate-pop" : ""} `}
+        >
+          {isFavorite ? "⭐" : "☆"}
+        </button>
+      </div>
     </Card>
   );
 }

@@ -24,22 +24,24 @@ export function AnimeGrid({
   loadMoreRef,
 }: Props) {
   const navigate = useNavigate();
+  const animeList =
+    data?.pages.flatMap((page) =>
+      Array.isArray(page.data) ? page.data : []
+    ) ?? [];
 
   return (
     <>
       <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">
-        {data?.pages.map((page) =>
-          page.data.map((anime) => (
-            <AnimeCard
-              key={anime.mal_id}
-              anime={anime}
-              onClick={() => {
-                saveScrollPosition();
-                navigate(`/anime/${anime.mal_id}`);
-              }}
-            />
-          ))
-        )}
+        {animeList.map((anime) => (
+          <AnimeCard
+            key={anime.mal_id}
+            anime={anime}
+            onClick={() => {
+              saveScrollPosition();
+              navigate(`/anime/${anime.mal_id}`);
+            }}
+          />
+        ))}
       </ul>
 
       {hasNextPage &&

@@ -20,6 +20,12 @@ export function useAnimeFilters() {
   );
   const [genres, setGenres] = useState<number[]>(initialGenres);
 
+  const [orderBy, setOrderBy] = useState<
+    "score" | "year" | "popularity" | undefined
+  >("score");
+
+  const [sort, setSort] = useState<"asc" | "desc">("desc");
+
   const debouncedSearch = useDebounce(search);
 
   useEffect(() => {
@@ -38,6 +44,8 @@ export function useAnimeFilters() {
     year: year ?? undefined,
     minScore: minScore ?? undefined,
     genres,
+    orderBy,
+    sort,
   };
 
   const resetFilters = () => {
@@ -45,6 +53,8 @@ export function useAnimeFilters() {
     setYear(null);
     setMinScore(null);
     setGenres([]);
+    setOrderBy("score");
+    setSort("desc")
   };
 
   return {
@@ -52,11 +62,15 @@ export function useAnimeFilters() {
     year,
     minScore,
     genres,
+    orderBy,
+    sort,
 
     setSearch,
     setYear,
     setMinScore,
     setGenres,
+    setOrderBy,
+    setSort,
 
     resetFilters,
     filters,

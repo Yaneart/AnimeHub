@@ -30,8 +30,12 @@ export function useAnimeList(
     enabled: options?.enabled ?? true,
   });
 
-  const isEmpty = data?.pages.every(
-    (page) => page.data.length === 0
+  const isEmpty = Boolean(
+    data &&
+    data.pages.length > 0 &&
+    data.pages.every(
+      (page) => Array.isArray(page.data) && page.data.length === 0
+    )
   );
 
   return {

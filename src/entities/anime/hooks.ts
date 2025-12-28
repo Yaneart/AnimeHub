@@ -9,6 +9,7 @@ import {
   getAnimeGenres,
   getAnimeList,
   getAnimePictures,
+  getAnimeRecommendations,
   getRandomAnime,
   getRandomAnimeByFilter,
 } from "./api/api";
@@ -25,7 +26,7 @@ export function useAnimeCatalog(filters: AnimeFilters) {
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getAnimeList({ ...filters, page: pageParam }),
     getNextPageParam: (lastPage) =>
-      lastPage.pagination.has_next_page
+      lastPage?.pagination?.has_next_page
         ? lastPage.pagination.current_page + 1
         : undefined,
   });
@@ -120,6 +121,15 @@ export function useAnimePictures(id: number) {
   return useQuery({
     queryKey: ["anime", id, "pictures"],
     queryFn: () => getAnimePictures(id),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 60,
+  });
+}
+
+export function useAnimeRecommendations(id: number) {
+  return useQuery({
+    queryKey: ["anime", id, "recommendations"],
+    queryFn: () => getAnimeRecommendations(id),
     enabled: !!id,
     staleTime: 1000 * 60 * 60,
   });

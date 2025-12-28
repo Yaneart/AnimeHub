@@ -4,9 +4,11 @@ export interface Anime {
   images: {
     jpg: {
       large_image_url: string;
+      small_image_url: string;
     };
     webp?: {
       large_image_url: string;
+      small_image_url :string;
     };
   };
 
@@ -25,4 +27,9 @@ export interface GetAnimeListParams {
   query?: string;
   year?: number;
   minScore?: number;
+}
+
+export interface AnimeSort {
+  orderBy?: "score" | "year" | "popularity";
+  sort?: "asc" | "desc";
 }

@@ -7,6 +7,7 @@ import { AnimeCardSkeleton } from "../../entities/anime/ui/anime-card-skeleton";
 import { useAnimeList } from "../../shared/hooks/use-anime-list";
 import { AnimeFilters } from "../anime-filters/AnimeFilters";
 import { AnimeGrid } from "../anime-grid/AnimeGrid";
+import { ErrorState } from "../../shared/ui/error-state/ErrorState";
 
 export function AnimeListPage() {
   useEffect(() => {
@@ -18,11 +19,15 @@ export function AnimeListPage() {
     year,
     minScore,
     genres,
+    orderBy,
+    sort,
 
     setSearch,
     setYear,
     setMinScore,
     setGenres,
+    setOrderBy,
+    setSort,
 
     resetFilters,
     filters,
@@ -51,11 +56,7 @@ export function AnimeListPage() {
     );
   }
 
-  if (isError) {
-    return (
-      <div className="p-4 text-slate-700 dark:text-slate-300">Error 😢</div>
-    );
-  }
+  <ErrorState message="Не удалось загрузить данные 😢" />;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 text-slate-900 dark:text-slate-100">
@@ -68,10 +69,14 @@ export function AnimeListPage() {
         year={year}
         minScore={minScore}
         genres={genres}
+        orderBy={orderBy}
+        sort={sort}
         setSearch={setSearch}
         setYear={setYear}
         setMinScore={setMinScore}
         setGenres={setGenres}
+        setOrderBy={setOrderBy}
+        setSort={setSort}
         resetFilters={resetFilters}
         onRandom={randomByFilters}
         isRandomPending={isRandomPending}

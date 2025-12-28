@@ -10,6 +10,7 @@ interface Props {
 export function Modal({ open, onClose, children }: Props) {
   useEffect(() => {
     if (!open) return;
+    
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -23,12 +24,13 @@ export function Modal({ open, onClose, children }: Props) {
       document.body.style.overflow = "";
     };
   }, [open, onClose]);
+  
 
   if (!open) return null;
 
   return createPortal(
     <div
-      className="fixed inset-0 z-10 grid place-items-center bg-black/70"
+      className="animate-fade-in fixed inset-0 z-10 grid place-items-center bg-black/70"
       onClick={onClose}
     >
       <div className="relative" onClick={(e) => e.stopPropagation()}>

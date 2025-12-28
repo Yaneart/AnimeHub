@@ -1,7 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import { useAnimeById, useAnimePictures } from "../../entities/anime/hooks";
+import {
+  useAnimeById,
+  useAnimePictures,
+  useAnimeRecommendations,
+} from "../../entities/anime/hooks";
 
 import { Skeleton } from "../../shared/ui/skeleton/skeleton";
 import { Button } from "../../shared/button/button";
@@ -10,12 +14,20 @@ import { useFavoritesStore } from "../../shared/store/favorites.store";
 import { TrailerModal } from "../../entities/anime/ui/TrailerModal";
 import { AnimePictures } from "../../entities/anime/ui/AnimePictures";
 
+import toast from "react-hot-toast";
+import { AnimeRecommendations } from "../../entities/anime/ui/AnimeRecommendations";
+
 export function AnimeDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const animeId = Number(id);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
+
+  const { data: recData, isLoading: isRecLoading } =
+    useAnimeRecommendations(animeId);
+
+  const recommendations = recData?.data.map((r) => r.entry) ?? [];
 
   const { data, isLoading, isError } = useAnimeById(animeId);
   const { data: picturesData, isLoading: isPicturesLoading } =
@@ -66,7 +78,19 @@ export function AnimeDetailsPage() {
           <div>⭐ {anime.score ?? "—"}</div>
           <div>Год: {anime.year ?? "—"}</div>
 
-          <Button onClick={() => toggleFavorite(anime.mal_id)}>
+          <Button
+            onClick={() => {
+              const added = !isFav;
+              toggleFavorite(anime.mal_id);
+
+              toast.dismiss("favorite");
+
+              toast.success(
+                added ? "⭐ Добавлено в избранное" : "☆ Удалено из избранного",
+                { id: "favorite" }
+              );
+            }}
+          >
             {isFav ? "⭐ Удалить из избранных" : "☆ Добавить в избранные"}
           </Button>
 
@@ -92,6 +116,9 @@ export function AnimeDetailsPage() {
       )}
 
       {pictures.length > 0 && <AnimePictures pictures={pictures.slice(0, 8)} />}
+      {!isRecLoading && recommendations.length > 0 && (
+        <AnimeRecommendations list={recommendations.slice(0, 10)} />
+      )}
     </div>
   );
 }
