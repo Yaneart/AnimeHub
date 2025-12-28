@@ -21,7 +21,7 @@ export function useAnimeFilters() {
   const [genres, setGenres] = useState<number[]>(initialGenres);
 
   const [orderBy, setOrderBy] = useState<
-    "score" | "year" | "popularity" | undefined
+    "score" | "start_date" | "popularity" | undefined
   >("score");
 
   const [sort, setSort] = useState<"asc" | "desc">("desc");

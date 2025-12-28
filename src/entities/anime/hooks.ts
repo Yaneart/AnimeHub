@@ -12,6 +12,7 @@ import {
   getAnimeRecommendations,
   getRandomAnime,
   getRandomAnimeByFilter,
+  getSeasonAnime,
 } from "./api/api";
 import type { Anime } from "./types";
 import { useNavigate } from "react-router-dom";
@@ -131,6 +132,18 @@ export function useAnimeRecommendations(id: number) {
     queryKey: ["anime", id, "recommendations"],
     queryFn: () => getAnimeRecommendations(id),
     enabled: !!id,
+    staleTime: 1000 * 60 * 60,
+  });
+}
+
+export function useSeasonAnime(
+  year: number,
+  season: "spring" | "summer" | "fall" | "winter"
+) {
+  return useQuery({
+    queryKey: ["anime", "season", year, season],
+    queryFn: () => getSeasonAnime(year, season),
+    enabled: !!year && !!season,
     staleTime: 1000 * 60 * 60,
   });
 }

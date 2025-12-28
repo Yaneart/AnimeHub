@@ -36,6 +36,10 @@ export function Header() {
           </Link>
         </nav>
 
+        <Link to="/season" className={linkClass("/season")}>
+          Сезоны
+        </Link>
+
         <div className="ml-auto flex items-center gap-2">
           <button
             onClick={() => openRandom()}

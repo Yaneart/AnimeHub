@@ -3,6 +3,7 @@ import { AnimeListPage } from "../pages/anime-list/page";
 import { AnimeDetailsPage } from "../pages/anime-details/page";
 import { FavoritesPage } from "../pages/favorites/page";
 import { AppLayout } from "./layout";
+import { SeasonPage } from "../pages/season/page";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,11 @@ const router = createBrowserRouter([
         path: "/favorites",
         element: <FavoritesPage />,
       },
+      {
+        path: "/season",
+        element: <SeasonPage />,
+      },
+      
     ],
   },
 ]);

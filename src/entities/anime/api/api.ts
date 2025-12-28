@@ -17,8 +17,19 @@ interface RecommendationResponse {
   }[];
 }
 
+interface SeasonResponse {
+  data: Anime[];
+}
+
 export function getAnimeList(params: GetAnimeListParams) {
   return http<AnimeListResponse>(`/anime?${buildAnimeParams(params)}`);
+}
+
+export function getSeasonAnime(
+  year: number,
+  season: "spring" | "summer" | "fall" | "winter"
+) {
+  return http<SeasonResponse>(`/seasons/${year}/${season}`);
 }
 
 export function getAnimeRecommendations(id: number) {
