@@ -5,29 +5,33 @@ import { FavoritesPage } from "../pages/favorites/page";
 import { AppLayout } from "./layout";
 import { SeasonPage } from "../pages/season/page";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      element: <AppLayout />,
+      children: [
+        {
+          path: "/",
+          element: <AnimeListPage />,
+        },
+        {
+          path: "/anime/:id",
+          element: <AnimeDetailsPage />,
+        },
+        {
+          path: "/favorites",
+          element: <FavoritesPage />,
+        },
+        {
+          path: "/season",
+          element: <SeasonPage />,
+        },
+      ],
+    },
+  ],
   {
-    element: <AppLayout />,
-    children: [
-      {
-        path: "/",
-        element: <AnimeListPage />,
-      },
-      {
-        path: "/anime/:id",
-        element: <AnimeDetailsPage />,
-      },
-      {
-        path: "/favorites",
-        element: <FavoritesPage />,
-      },
-      {
-        path: "/season",
-        element: <SeasonPage />,
-      },
-      
-    ],
-  },
-]);
+    basename: "/AnimeHub",
+  }
+);
 
 export default router;
