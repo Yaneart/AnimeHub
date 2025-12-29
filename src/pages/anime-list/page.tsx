@@ -56,25 +56,13 @@ export function AnimeListPage() {
   const { mutate: randomByFilters, isPending: isRandomPending } =
     useRandomAnimeByFilters(filters);
 
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 p-4">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <AnimeCardSkeleton key={i} />
-        ))}
-      </div>
-    );
-  }
-
   if (isError) {
     return <ErrorState message="Не удалось загрузить данные 😢" />;
   }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 text-slate-900 dark:text-slate-100">
-      <h1 className="mb-6 text-3xl font-bold text-slate-900 dark:text-slate-100">
-        Anime list
-      </h1>
+      <h1 className="mb-6 text-3xl font-bold">Anime list</h1>
 
       <AnimeFilters
         search={search}
@@ -110,12 +98,20 @@ export function AnimeListPage() {
         </div>
       )}
 
-      <AnimeGrid
-        data={data}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-        loadMoreRef={loadMoreRef}
-      />
+      {isLoading ? (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <AnimeCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : (
+        <AnimeGrid
+          data={data}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          loadMoreRef={loadMoreRef}
+        />
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { type Anime } from "../types";
-import { Card } from "../../../shared/ui/card/card";
 import { useFavoritesStore } from "../../../shared/store/favorites.store";
 import toast from "react-hot-toast";
+import { Heart } from "lucide-react";
 
 interface Props {
   anime: Anime;
@@ -12,59 +12,56 @@ export function AnimeCard({ anime, onClick }: Props) {
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
   const isFavorite = useFavoritesStore((s) => s.isFavorite(anime.mal_id));
 
+  const image =
+    anime.images.webp?.large_image_url ?? anime.images.jpg.large_image_url;
+
   return (
-    <Card>
-      <div
-        onClick={onClick}
-        className="animate-fade-scale relative flex w-full gap-4 text-left focus-visible:outline-none"
+    <div
+      onClick={onClick}
+      className="group relative cursor-pointer overflow-hidden rounded-xl bg-slate-900 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/20"
+    >
+      <img
+        loading="lazy"
+        src={image}
+        alt={anime.title}
+        className="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+      <button
+        type="button"
+        aria-label="toggle favorite"
+        onClick={(e) => {
+          e.stopPropagation();
+
+          const added = !isFavorite;
+          toggleFavorite(anime.mal_id);
+
+          toast.dismiss("favorite");
+          toast.success(
+            added ? "Добавлено в избранное" : "Удалено из избранного",
+            { id: "favorite" }
+          );
+        }}
+        className="absolute top-3 right-3 z-10 rounded-full bg-white/5 p-2 backdrop-blur transition hover:bg-white/10"
       >
-        <img
-          loading="lazy"
-          src={
-            anime.images.webp?.large_image_url ??
-            anime.images.jpg.large_image_url
-          }
-          alt={anime.title}
-          className="h-28 w-20 shrink-0 rounded-md object-cover"
+        <Heart
+          className={`h-4 w-4 transition ${
+            isFavorite ? "fill-red-400 text-cyan-400" : "text-white/70"
+          } `}
         />
+      </button>
 
-        <div className="flex flex-1 flex-col gap-1">
-          <h3 className="line-clamp-2 text-base font-semibold">
-            {anime.title}
-          </h3>
+      <div className="absolute right-0 bottom-0 left-0 p-4">
+        <h3 className="line-clamp-2 text-sm font-semibold text-white">
+          {anime.title}
+        </h3>
 
-          <div className="text-sm text-slate-600 dark:text-slate-400">
-            ⭐ {anime.score ?? "—"}
-          </div>
-
-          <div className="text-sm text-slate-500 dark:text-slate-500">
-            {anime.year ?? "—"}
-          </div>
+        <div className="mt-1 text-xs text-slate-300">
+          ⭐ {anime.score ?? "—"}
+          {anime.year && <span className="ml-2">· {anime.year}</span>}
         </div>
-
-        <button
-          type="button"
-          aria-label="toggle favorite"
-          onClick={(e) => {
-            e.stopPropagation();
-
-            const added = !isFavorite;
-            toggleFavorite(anime.mal_id);
-
-            toast.dismiss("favorite");
-
-            toast.success(
-              added ? "⭐ Добавлено в избранное" : "☆ Удалено из избранного",
-              {
-                id: "favorite",
-              }
-            );
-          }}
-          className={`absolute top-10 right-2 text-xl transition-transform hover:scale-125 ${isFavorite ? "animate-pop" : ""} `}
-        >
-          {isFavorite ? "⭐" : "☆"}
-        </button>
       </div>
-    </Card>
+    </div>
   );
 }

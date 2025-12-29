@@ -1,18 +1,11 @@
-import { Card } from "../../../shared/ui/card/card";
-import { Skeleton } from "../../../shared/ui/skeleton/skeleton";
-
 export function AnimeCardSkeleton() {
   return (
-    <Card>
-      <div className="flex gap-4">
-        <Skeleton width={80} height={110} />
-
-        <div className="flex-1 space-y-2">
-          <Skeleton height={18} />
-          <Skeleton width={60} />
-          <Skeleton width={40} />
-        </div>
+    <div className="relative h-72 overflow-hidden rounded-xl bg-slate-200 dark:bg-slate-800">
+      <div className="animate-shimmer absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent dark:via-white/10" />
+      <div className="absolute right-0 bottom-0 left-0 p-4">
+        <div className="mb-2 h-4 w-3/4 rounded bg-slate-300 dark:bg-slate-700" />
+        <div className="h-3 w-1/3 rounded bg-slate-300 dark:bg-slate-700" />
       </div>
-    </Card>
+    </div>
   );
 }

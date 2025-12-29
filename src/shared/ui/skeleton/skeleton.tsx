@@ -1,22 +1,7 @@
-interface Props {
-  width?: number | string;
-  height?: number | string;
-  borderRadius?: number;
-}
-
-export function Skeleton({
-  width = "100%",
-  height = 16,
-  borderRadius = 4,
-}: Props) {
+export function Skeleton() {
   return (
-    <div
-      className="animate-pulse bg-slate-200 dark:bg-slate-700"
-      style={{
-        width,
-        height,
-        borderRadius,
-      }}
-    />
+    <div className="relative h-72 overflow-hidden rounded-xl bg-slate-800">
+      <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.4s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+    </div>
   );
 }

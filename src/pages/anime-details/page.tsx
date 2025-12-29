@@ -39,9 +39,9 @@ export function AnimeDetailsPage() {
   if (isLoading) {
     return (
       <div className="space-y-6 p-16">
-        <Skeleton width={200} height={300} borderRadius={8} />
-        <Skeleton width={300} height={28} />
-        <Skeleton width={120} />
+        <Skeleton />
+        <Skeleton />
+        <Skeleton />
       </div>
     );
   }
@@ -58,52 +58,89 @@ export function AnimeDetailsPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-10 p-6 text-slate-900 dark:text-slate-100">
-      <Button variant="ghost" onClick={() => navigate(-1)}>
-        ← Назад
-      </Button>
-
-      <div className="flex flex-col gap-8 md:flex-row">
-        <img
-          src={
-            anime.images.webp?.large_image_url ??
-            anime.images.jpg.large_image_url
-          }
-          alt={anime.title}
-          className="w-48 rounded-lg"
+      <div className="animate-hero-fade relative -mx-6">
+        <div
+          className="h-[420px] w-full bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${
+              anime.images.webp?.large_image_url ??
+              anime.images.jpg.large_image_url
+            })`,
+          }}
         />
 
-        <div className="flex flex-col gap-4">
-          <h1 className="text-3xl font-bold">{anime.title}</h1>
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
-          <div>⭐ {anime.score ?? "—"}</div>
-          <div>Год: {anime.year ?? "—"}</div>
+        <div className="absolute inset-0">
+          <div className="mx-auto flex h-full max-w-6xl items-end px-6 pb-10">
+            <div className="animate-hero-content max-w-2xl text-white">
+              <Button
+                variant="ghost"
+                className="transition hover:bg-white/10"
+                onClick={() => navigate(-1)}
+              >
+                ← Назад
+              </Button>
 
-          <Button
-            onClick={() => {
-              const added = !isFav;
-              toggleFavorite(anime.mal_id);
+              <h1 className="text-4xl leading-tight font-bold">
+                {anime.title}
+              </h1>
 
-              toast.dismiss("favorite");
+              <div className="mt-3 flex items-center gap-4 text-sm text-slate-300">
+                <span>⭐ {anime.score ?? "—"}</span>
+                <span>📅 {anime.year ?? "—"}</span>
+              </div>
 
-              toast.success(
-                added ? "⭐ Добавлено в избранное" : "☆ Удалено из избранного",
-                { id: "favorite" }
-              );
-            }}
-          >
-            {isFav ? "⭐ Удалить из избранных" : "☆ Добавить в избранные"}
-          </Button>
+              {anime.synopsis && (
+                <p className="mt-4 line-clamp-3 text-sm text-slate-300">
+                  {anime.synopsis}
+                </p>
+              )}
 
-          {trailerUrl && (
-            <Button onClick={() => setIsTrailerOpen(true)}>
-              ▶️ Смотреть трейлер
-            </Button>
-          )}
+              <div className="mt-5 flex flex-wrap gap-2">
+                {anime.genres.map((g) => (
+                  <span
+                    key={g.mal_id}
+                    className="rounded-full bg-white/10 px-3 py-1 text-xs backdrop-blur"
+                  >
+                    {g.name}
+                  </span>
+                ))}
+              </div>
 
-          {!trailerUrl && (
-            <div className="text-slate-500">Трейлер недоступен 😢</div>
-          )}
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Button
+                  className="transition-transform hover:-translate-y-0.5"
+                  onClick={() => {
+                    const added = !isFav;
+                    toggleFavorite(anime.mal_id);
+
+                    toast.dismiss("favorite");
+                    toast.success(
+                      added
+                        ? "⭐ Добавлено в избранное"
+                        : "☆ Удалено из избранного",
+                      { id: "favorite" }
+                    );
+                  }}
+                >
+                  {isFav ? "⭐ В избранном" : "☆ В избранное"}
+                </Button>
+
+                {trailerUrl && (
+                  <Button
+                    className="transition-transform hover:-translate-y-0.5"
+                    onClick={() => setIsTrailerOpen(true)}
+                  >
+                    ▶ Смотреть трейлер
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div className="pointer-events-none absolute bottom-0 h-32 w-full bg-gradient-to-t from-[#0b0e14] to-transparent" />
       </div>
 
       {trailerUrl && (
@@ -116,13 +153,12 @@ export function AnimeDetailsPage() {
       )}
 
       {isPicturesLoading && (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} height={120} borderRadius={12} />
+            <Skeleton key={i} />
           ))}
         </div>
       )}
-
       {!isPicturesLoading && pictures.length > 0 && (
         <AnimePictures pictures={pictures.slice(0, 8)} />
       )}

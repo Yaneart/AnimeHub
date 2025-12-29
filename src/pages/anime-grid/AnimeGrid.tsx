@@ -31,7 +31,7 @@ export function AnimeGrid({
 
   return (
     <>
-      <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">
+      <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {animeList.map((anime, index) => (
           <AnimeCard
             key={`${anime.mal_id}-${index}`}

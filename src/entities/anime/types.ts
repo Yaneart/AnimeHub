@@ -13,6 +13,7 @@ export interface Anime {
   };
 
   score: number | null;
+  synopsis?: string | null;
   year: number | null;
 
   trailer?: {
@@ -20,6 +21,10 @@ export interface Anime {
     url?: string | null;
     embed_url?: string | null;
   };
+  genres: {
+    mal_id: number;
+    name: string;
+  }[];
 }
 
 export interface GetAnimeListParams {

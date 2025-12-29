@@ -13,6 +13,16 @@ const SEASONS = [
 
 type Season = (typeof SEASONS)[number]["value"];
 
+const field = `
+  appearance-none
+  rounded-xl
+  bg-slate-100 dark:bg-slate-900
+  text-slate-900 dark:text-slate-100
+  px-5.5 py-2 text-sm
+  outline-none transition
+  focus:ring-2 focus:ring-red-400/40 
+`;
+
 export function SeasonPage() {
   const currentYear = new Date().getFullYear();
   const navigate = useNavigate();
@@ -40,7 +50,7 @@ export function SeasonPage() {
         <select
           value={season}
           onChange={(e) => setSeason(e.target.value as Season)}
-          className="rounded-lg border px-3 py-2 dark:bg-slate-900"
+          className={field}
         >
           {SEASONS.map((s) => (
             <option key={s.value} value={s.value}>
@@ -52,7 +62,7 @@ export function SeasonPage() {
         <select
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}
-          className="rounded-lg border px-3 py-2 dark:bg-slate-900"
+          className={field}
         >
           {Array.from({ length: 30 }, (_, i) => {
             const y = currentYear - i;

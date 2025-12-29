@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "../../shared/button/button";
 import { useAnimeGenres } from "../../entities/anime/hooks";
 import type { AnimeStatus, AnimeType } from "../../shared/types/anime-filters";
+import { SlidersHorizontal } from "lucide-react";
 
 export type OrderBy = "score" | "start_date" | "popularity";
 export type Sort = "asc" | "desc";
@@ -36,8 +37,15 @@ interface Props {
   isRandomPending: boolean;
 }
 
-const field =
-  "rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 dark:focus:ring-slate-600";
+const field = `
+  appearance-none
+  rounded-xl
+  bg-slate-100 dark:bg-slate-900
+  text-slate-900 dark:text-slate-100
+  px-5.5 py-2 text-sm
+  outline-none transition
+  focus:ring-2 focus:ring-red-400/40 
+`;
 
 export function AnimeFilters({
   search,
@@ -66,19 +74,17 @@ export function AnimeFilters({
   onRandom,
   isRandomPending,
 }: Props) {
-  const [isGenresOpen, setIsGenresOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const { data: genresData } = useAnimeGenres();
 
   return (
-    <section className="mb-8 space-y-6">
-      <div>
-        <input
-          className="w-full max-w-3xl rounded-2xl border px-5 py-4 text-base"
-          placeholder="🔍 Search anime..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+    <section className="mb-10 space-y-6">
+      <input
+        className="w-full rounded-2xl bg-white/5 px-6 py-4 text-base backdrop-blur outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-red-400/40"
+        placeholder="🔍 Search anime..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
       <div className="flex flex-wrap items-center gap-3">
         <select
@@ -87,6 +93,11 @@ export function AnimeFilters({
           onChange={(e) =>
             setYear(e.target.value ? Number(e.target.value) : null)
           }
+          onWheel={(e) => {
+            if (document.activeElement !== e.currentTarget) {
+              e.currentTarget.blur();
+            }
+          }}
         >
           <option value="">Год</option>
           {Array.from({ length: 30 }, (_, i) => {
@@ -140,44 +151,47 @@ export function AnimeFilters({
           <option value="ona">ONA</option>
         </select>
 
-        <div className="relative">
-          <Button type="button" onClick={() => setIsGenresOpen((v) => !v)}>
-            Жанры {genres.length > 0 && `(${genres.length})`}
-          </Button>
-
-          {isGenresOpen && (
-            <div className="absolute z-20 mt-2 max-h-72 w-64 overflow-auto rounded-xl border bg-white p-3 shadow-xl dark:bg-slate-900">
-              {genresData?.data.map((genre) => (
-                <label
-                  key={genre.mal_id}
-                  className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1 text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
-                >
-                  <input
-                    type="checkbox"
-                    checked={genres.includes(genre.mal_id)}
-                    onChange={() =>
-                      setGenres(
-                        genres.includes(genre.mal_id)
-                          ? genres.filter((id) => id !== genre.mal_id)
-                          : [...genres, genre.mal_id]
-                      )
-                    }
-                  />
-                  {genre.name}
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
+        <Button
+          variant="ghost"
+          className="flex items-center gap-2"
+          onClick={() => setOpen((v) => !v)}
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          Фильтры
+        </Button>
       </div>
 
-      <details className="group">
-        <summary className="cursor-pointer text-sm text-slate-500">
-          ⚙ Дополнительные фильтры
-        </summary>
+      {open && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-black/5 backdrop-blur dark:border-white/10 dark:bg-black/60 dark:shadow-black/40">
+          <div className="mb-4">
+            <div className="mb-2 text-sm text-slate-400">Жанры</div>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {genresData?.data.map((g) => {
+                const active = genres.includes(g.mal_id);
+                return (
+                  <button
+                    key={g.mal_id}
+                    onClick={() =>
+                      setGenres(
+                        active
+                          ? genres.filter((id) => id !== g.mal_id)
+                          : [...genres, g.mal_id]
+                      )
+                    }
+                    className={`rounded-full px-3 py-1 text-xs transition ${
+                      active
+                        ? "bg-cyan-400 text-black"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
+                    } `}
+                  >
+                    {g.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2 text-sm">
+          <div className="mb-4 flex items-center gap-2 text-sm">
             Эпизоды:
             <input
               className={`${field} w-20`}
@@ -193,45 +207,46 @@ export function AnimeFilters({
             />
           </div>
 
-          <select
-            className={field}
-            value={orderBy}
-            onChange={(e) => setOrderBy(e.target.value as OrderBy)}
-          >
-            <option value="score">Сортировка</option>
-            <option value="start_date">Год</option>
-            <option value="popularity">Популярность</option>
-          </select>
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <select
+              className={field}
+              value={orderBy}
+              onChange={(e) => setOrderBy(e.target.value as OrderBy)}
+            >
+              <option value="score">Сортировка</option>
+              <option value="start_date">Год</option>
+              <option value="popularity">Популярность</option>
+            </select>
 
-          <select
-            className={field}
-            value={sort}
-            onChange={(e) => setSort(e.target.value as Sort)}
-          >
-            <option value="desc">↓</option>
-            <option value="asc">↑</option>
-          </select>
+            <select
+              className={field}
+              value={sort}
+              onChange={(e) => setSort(e.target.value as Sort)}
+            >
+              <option value="desc">↓</option>
+              <option value="asc">↑</option>
+            </select>
 
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={sfw}
-              onChange={(e) => setSfw(e.target.checked)}
-            />
-            SFW
-          </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={sfw}
+                onChange={(e) => setSfw(e.target.checked)}
+              />
+              SFW
+            </label>
+          </div>
+          <div className="flex items-center justify-between border-t border-white/10 pt-4">
+            <Button variant="ghost" onClick={resetFilters}>
+              Сброс
+            </Button>
+
+            <Button onClick={onRandom} disabled={isRandomPending}>
+              🎯 Random
+            </Button>
+          </div>
         </div>
-      </details>
-
-      <div className="flex items-center justify-between border-t pt-4">
-        <Button variant="ghost" onClick={resetFilters}>
-          Сброс
-        </Button>
-
-        <Button onClick={onRandom} disabled={isRandomPending}>
-          🎯 Random
-        </Button>
-      </div>
+      )}
     </section>
   );
 }
