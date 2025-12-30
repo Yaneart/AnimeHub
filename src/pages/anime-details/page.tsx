@@ -40,8 +40,6 @@ export function AnimeDetailsPage() {
     return (
       <div className="space-y-6 p-16">
         <Skeleton />
-        <Skeleton />
-        <Skeleton />
       </div>
     );
   }
@@ -69,7 +67,7 @@ export function AnimeDetailsPage() {
           }}
         />
 
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-xs" />
 
         <div className="absolute inset-0">
           <div className="mx-auto flex h-full max-w-6xl items-end px-6 pb-10">

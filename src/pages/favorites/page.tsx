@@ -23,15 +23,18 @@ export function FavoritesPage() {
   if (isError) return <div>Error 😢</div>;
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <h1>⭐ Favorites</h1>
-      {AnimeList.map((anime) => (
-        <AnimeCard
-          key={anime.mal_id}
-          anime={anime}
-          onClick={() => navigate(`/anime/${anime.mal_id}`)}
-        />
-      ))}
+    <div className="min-h-screen w-full p-4">
+      <h1 className="mb-6 text-2xl font-semibold">⭐ Favorites</h1>
+
+      <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
+        {AnimeList.map((anime) => (
+          <AnimeCard
+            key={anime.mal_id}
+            anime={anime}
+            onClick={() => navigate(`/anime/${anime.mal_id}`)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
