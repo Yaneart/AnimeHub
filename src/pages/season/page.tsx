@@ -3,12 +3,13 @@ import { useSeasonAnime } from "../../entities/anime/hooks";
 import { AnimeCard } from "../../entities/anime/ui/anime-card";
 import { saveScrollPosition } from "../../shared/lib/scroll";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SEASONS = [
-  { value: "spring", label: "🌸 Spring" },
-  { value: "summer", label: "☀️ Summer" },
-  { value: "fall", label: "🍁 Fall" },
-  { value: "winter", label: "❄️ Winter" },
+  { value: "spring", label: "🌸" },
+  { value: "summer", label: "☀️" },
+  { value: "fall", label: "🍁" },
+  { value: "winter", label: "❄️" },
 ] as const;
 
 type Season = (typeof SEASONS)[number]["value"];
@@ -26,6 +27,7 @@ const field = `
 export function SeasonPage() {
   const currentYear = new Date().getFullYear();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [year, setYear] = useState(currentYear);
   const [season, setSeason] = useState<Season>("spring");
@@ -33,18 +35,18 @@ export function SeasonPage() {
   const { data, isLoading, isError } = useSeasonAnime(year, season);
 
   if (isLoading) {
-    return <div className="p-6">Loading...</div>;
+    return <div className="p-6">{t("loading")}</div>;
   }
 
   if (isError) {
-    return <div className="p-6">Ошибка загрузки 😢</div>;
+    return <div className="p-6">{t("loading error")}😢</div>;
   }
 
   const list = data?.data ?? [];
 
   return (
     <div className="mx-auto max-w-6xl p-6">
-      <h1 className="mb-6 text-3xl font-bold">Аниме сезона</h1>
+      <h1 className="mb-6 text-3xl font-bold">{t("anime sesons")}</h1>
 
       <div className="mb-6 flex flex-wrap gap-3">
         <select
@@ -54,7 +56,7 @@ export function SeasonPage() {
         >
           {SEASONS.map((s) => (
             <option key={s.value} value={s.value}>
-              {s.label}
+              {s.label} {t(`season.${s.value}`)}
             </option>
           ))}
         </select>
@@ -76,7 +78,7 @@ export function SeasonPage() {
       </div>
 
       {list.length === 0 && (
-        <div className="text-slate-500">Ничего не найдено 😢</div>
+        <div className="text-slate-500">{t("nothing found")}😢</div>
       )}
 
       <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">

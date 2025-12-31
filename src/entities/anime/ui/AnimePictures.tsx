@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Lightbox } from "../../../shared/ui/lightbox/Lightbox";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   pictures: {
@@ -10,6 +11,7 @@ interface Props {
 
 export function AnimePictures({ pictures }: Props) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const {t} = useTranslation()
 
   const images = pictures.map(
     (pic) => pic.webp?.large_image_url ?? pic.jpg.large_image_url
@@ -22,7 +24,7 @@ export function AnimePictures({ pictures }: Props) {
 
   return (
     <div className="mt-8">
-      <h2 className="mb-4 text-xl font-semibold">Кадры из аниме</h2>
+      <h2 className="mb-4 text-xl font-semibold">{t("stills")}</h2>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
         {images.map((src, index) => (

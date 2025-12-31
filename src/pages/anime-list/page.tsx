@@ -62,7 +62,6 @@ export function AnimeListPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 text-slate-900 dark:text-slate-100">
-      <h1 className="mb-6 text-3xl font-bold">Anime list</h1>
 
       <AnimeFilters
         search={search}

@@ -1,0 +1,42 @@
+{
+  "catalog": "Каталог",
+  "favorites": "Избранное",
+  "seasons": "Сезоны",
+  "random": "Случайное",
+  "theme": {
+    "light": "Светлая",
+    "dark": "Тёмная"
+  },
+  "year": "Год",
+  "rating": "Рейтинг",
+  "from" : "От",
+  "status": "Статус",
+  "out now" : "Сейчас выходят",
+  "completed": "Вышли",
+  "announcement" : "Анонс",
+  "type": "Тип",
+  "filters" : "фильтры",
+  "loading" : "Загрузка...",
+  "loading error" : "Ошибка загрузки",
+  "anime sesons" : "Аниме Сезона",
+  "nothing found" : "Ничего не найдено",
+  "season": {
+    "spring": "Весна",
+    "summer": "Лето",
+    "fall": "Осень",
+    "winter": "Зима"
+  },
+  "search" : "Поиск Аниме...",
+  "recomend": "Рекомендации",
+  "stills": "Кадры из Аниме",
+  "back" : "Назад",
+  "addToFavorit": {
+    "addTofavorit": "Добавить в избранное",
+    "removeFromfavorit" : "Удалить из избранного"
+  },
+  "favorite": {
+    "in": "⭐ В избранном",
+    "add": "☆ В избранное"
+  },
+  "watch trailer": "Смотреть трейлер"
+}

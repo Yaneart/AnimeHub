@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Card } from "../../../shared/ui/card/card";
 import type { Anime } from "../types";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   list: Anime[];
@@ -8,12 +9,13 @@ interface Props {
 
 export function AnimeRecommendations({ list }: Props) {
   const navigate = useNavigate();
+  const {t} = useTranslation()
 
   if (list.length === 0) return null;
 
   return (
     <div className="mt-10">
-      <h2 className="mb-4 text-xl font-semibold">Рекомендации</h2>
+      <h2 className="mb-4 text-xl font-semibold">{t("recomend")}</h2>
 
       <ul className="no-scrollbar flex gap-4 overflow-x-auto overflow-y-hidden pb-2">
         {list.map((anime) => (

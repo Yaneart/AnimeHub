@@ -1,0 +1,42 @@
+{
+  "favorites": "Favorites",
+  "catalog": "Catalog",
+  "seasons": "Seasons",
+  "random": "Random",
+  "theme": {
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "year": "Year",
+  "rating": "Rating",
+  "from": "From",
+  "status": "Status",
+  "out now": "Out Now",
+  "completed": "Completed",
+  "announcement": "Announcement",
+  "type": "Type",
+  "filters": "Filters",
+  "loading": "Loading...",
+  "loading error": "Loading error",
+  "anime sesons": "Anime Sesons",
+  "nothing found": "Nothing found",
+  "season": {
+    "spring": "Spring",
+    "summer": "Summer",
+    "fall": "Fall",
+    "winter": "Winter"
+  },
+  "search": "Search Anime...",
+  "recomend": "Recommendations",
+  "stills": "Stills from the Anime",
+  "back": "Back",
+  "addToFavorit": {
+    "addTofavorit": "Add to favorites",
+    "removeFromfavorit": "Remove from favorites"
+  },
+  "favorite": {
+    "in": "⭐ In favorites",
+    "add": "☆ Add to favorites"
+  },
+  "watch trailer": "Watch trailer"
+}

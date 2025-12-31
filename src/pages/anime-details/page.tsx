@@ -16,6 +16,8 @@ import { AnimePictures } from "../../entities/anime/ui/AnimePictures";
 
 import toast from "react-hot-toast";
 import { AnimeRecommendations } from "../../entities/anime/ui/AnimeRecommendations";
+import { RatingStars } from "../../entities/rating/ui/RatingStars";
+import { useTranslation } from "react-i18next";
 
 export function AnimeDetailsPage() {
   const { id } = useParams();
@@ -23,6 +25,8 @@ export function AnimeDetailsPage() {
 
   const animeId = Number(id);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
+
+  const { t } = useTranslation();
 
   const { data: recData, isLoading: isRecLoading } =
     useAnimeRecommendations(animeId);
@@ -60,10 +64,9 @@ export function AnimeDetailsPage() {
         <div
           className="h-[420px] w-full bg-cover bg-center"
           style={{
-            backgroundImage: `url(${
-              anime.images.webp?.large_image_url ??
+            backgroundImage: `url(${anime.images.webp?.large_image_url ??
               anime.images.jpg.large_image_url
-            })`,
+              })`,
           }}
         />
 
@@ -77,7 +80,7 @@ export function AnimeDetailsPage() {
                 className="transition hover:bg-white/10"
                 onClick={() => navigate(-1)}
               >
-                ← Назад
+                ←{t("back")}
               </Button>
 
               <h1 className="text-4xl leading-tight font-bold">
@@ -105,6 +108,7 @@ export function AnimeDetailsPage() {
                   </span>
                 ))}
               </div>
+              <RatingStars animeId={animeId} />
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button
@@ -116,13 +120,13 @@ export function AnimeDetailsPage() {
                     toast.dismiss("favorite");
                     toast.success(
                       added
-                        ? "⭐ Добавлено в избранное"
-                        : "☆ Удалено из избранного",
+                        ? `⭐${t("addToFavorit.addTofavorit")}`
+                        : `☆${t("addToFavorit.removeFromfavorit")}`,
                       { id: "favorite" }
                     );
                   }}
                 >
-                  {isFav ? "⭐ В избранном" : "☆ В избранное"}
+                  {t(isFav ? "favorite.in" : "favorite.add")}
                 </Button>
 
                 {trailerUrl && (
@@ -130,7 +134,7 @@ export function AnimeDetailsPage() {
                     className="transition-transform hover:-translate-y-0.5"
                     onClick={() => setIsTrailerOpen(true)}
                   >
-                    ▶ Смотреть трейлер
+                    ▶{t("watch trailer")}
                   </Button>
                 )}
               </div>

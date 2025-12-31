@@ -22,7 +22,7 @@ export const useFavoritesStore = create<FavoritesState>()(
       isFavorite: (id) => get().favorites.includes(id),
     }),
     {
-      name: "favorites-anime", // 🔥 ВАЖНО: тот же ключ
+      name: "favorites-anime",
     }
   )
 );

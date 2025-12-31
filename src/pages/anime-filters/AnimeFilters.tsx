@@ -3,6 +3,7 @@ import { Button } from "../../shared/button/button";
 import { useAnimeGenres } from "../../entities/anime/hooks";
 import type { AnimeStatus, AnimeType } from "../../shared/types/anime-filters";
 import { SlidersHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export type OrderBy = "score" | "start_date" | "popularity";
 export type Sort = "asc" | "desc";
@@ -76,12 +77,13 @@ export function AnimeFilters({
 }: Props) {
   const [open, setOpen] = useState(false);
   const { data: genresData } = useAnimeGenres();
+  const { t } = useTranslation();
 
   return (
     <section className="mb-10 space-y-6">
       <input
-        className="w-full rounded-2xl bg-white/5 px-6 py-4 text-base backdrop-blur outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-red-400/40"
-        placeholder="🔍 Search anime..."
+        className="w-full rounded-2xl bg-white/5 px-6 py-4 text-base backdrop-blur outline-none placeholder:text-slate-400   focus-visible:ring-2 focus-visible:ring-slate-400"
+        placeholder={`🔍${t("search")}`}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
@@ -99,7 +101,7 @@ export function AnimeFilters({
             }
           }}
         >
-          <option value="">Год</option>
+          <option value="">{t("year")}</option>
           {Array.from({ length: 30 }, (_, i) => {
             const y = new Date().getFullYear() - i;
             return (
@@ -117,10 +119,10 @@ export function AnimeFilters({
             setMinScore(e.target.value ? Number(e.target.value) : null)
           }
         >
-          <option value="">Рейтинг</option>
+          <option value="">{t("rating")}</option>
           {[9, 8, 7, 6, 5].map((s) => (
             <option key={s} value={s}>
-              от {s}
+              {t("from")} {s}
             </option>
           ))}
         </select>
@@ -132,10 +134,10 @@ export function AnimeFilters({
             setStatus((e.target.value as AnimeStatus) || undefined)
           }
         >
-          <option value="">Статус</option>
-          <option value="airing">Сейчас выходит</option>
-          <option value="complete">Завершено</option>
-          <option value="upcoming">Анонс</option>
+          <option value="">{t("status")}</option>
+          <option value="airing">{t("out now")}</option>
+          <option value="complete">{t("completed")}</option>
+          <option value="upcoming">{t("announcement")}</option>
         </select>
 
         <select
@@ -143,7 +145,7 @@ export function AnimeFilters({
           value={type ?? ""}
           onChange={(e) => setType((e.target.value as AnimeType) || undefined)}
         >
-          <option value="">Тип</option>
+          <option value="">{t("type")}</option>
           <option value="tv">TV</option>
           <option value="movie">Movie</option>
           <option value="ova">OVA</option>
@@ -157,7 +159,7 @@ export function AnimeFilters({
           onClick={() => setOpen((v) => !v)}
         >
           <SlidersHorizontal className="h-4 w-4" />
-          Фильтры
+          {t("filters")}
         </Button>
       </div>
 
@@ -178,11 +180,10 @@ export function AnimeFilters({
                           : [...genres, g.mal_id]
                       )
                     }
-                    className={`rounded-full px-3 py-1 text-xs transition ${
-                      active
-                        ? "bg-cyan-400 text-black"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
-                    } `}
+                    className={`rounded-full px-3 py-1 text-xs transition ${active
+                      ? "bg-cyan-400 text-black"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
+                      } `}
                   >
                     {g.name}
                   </button>
