@@ -1,11 +1,11 @@
 # AnimeHub 🎌
 
 <p align="center">
-  <img src="/public/mainpage.PNG" width="800" />
+  <img src="/public/detailspage.PNG" width="800" />
 </p>
 
 <p align="center">
-  <img src="/public/detailspage.PNG" width="600" />
+  <img src="/public/mainpage.PNG" width="800" />
 </p>
 
 Веб-приложение для просмотра аниме с поиском, фильтрами и избранным.
