@@ -64,9 +64,10 @@ export function AnimeDetailsPage() {
         <div
           className="h-[420px] w-full bg-cover bg-center"
           style={{
-            backgroundImage: `url(${anime.images.webp?.large_image_url ??
+            backgroundImage: `url(${
+              anime.images.webp?.large_image_url ??
               anime.images.jpg.large_image_url
-              })`,
+            })`,
           }}
         />
 

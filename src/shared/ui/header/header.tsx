@@ -12,9 +12,10 @@ export function Header() {
 
   const linkClass = useCallback(
     (path: string) =>
-      `px-3 py-2 rounded-lg transition ${pathname === path
-        ? "bg-slate-200 text-slate-900 border dark:bg-slate-100 dark:text-slate-900"
-        : "text-slate-700 hover:bg-gray-400 dark:text-slate-300 dark:hover:bg-slate-800"
+      `px-3 py-2 rounded-lg transition ${
+        pathname === path
+          ? "bg-slate-200 text-slate-900 border dark:bg-slate-100 dark:text-slate-900"
+          : "text-slate-700 hover:bg-gray-400 dark:text-slate-300 dark:hover:bg-slate-800"
       }`,
     [pathname]
   );
@@ -26,22 +27,23 @@ export function Header() {
 
   const langButton = (lang: string) =>
     `rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200
-     ${i18n.language.startsWith(lang)
-      ? `
+     ${
+       i18n.language.startsWith(lang)
+         ? `
             bg-slate-400 text-slate-900
             shadow-sm ring-1 ring-slate-900/20
             backdrop-blur
             dark:bg-white/10 dark:text-white
             dark:ring-white/20
           `
-      : `
+         : `
             text-slate-600 hover:text-slate-900
             hover:bg-slate-900/5
             dark:text-white/60
             dark:hover:text-white
             dark:hover:bg-white/5
           `
-    }`;
+     }`;
 
   return (
     <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
@@ -92,7 +94,6 @@ export function Header() {
               EN
             </button>
           </div>
-
         </div>
       </div>
     </header>

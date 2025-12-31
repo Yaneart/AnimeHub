@@ -6,12 +6,12 @@ import { motion } from "framer-motion";
 
 interface Props {
   data:
-  | {
-    pages: {
-      data: any[];
-    }[];
-  }
-  | undefined;
+    | {
+        pages: {
+          data: any[];
+        }[];
+      }
+    | undefined;
 
   hasNextPage: boolean | undefined;
   isFetchingNextPage: boolean;
@@ -32,18 +32,21 @@ export function AnimeGrid({
 
   return (
     <>
-        <motion.div layout className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {animeList.map((anime, index) => (
-            <AnimeCard
-              key={`${anime.mal_id}-${index}`}
-              anime={anime}
-              onClick={() => {
-                saveScrollPosition();
-                navigate(`/anime/${anime.mal_id}`);
-              }}
-            />
-          ))}
-        </motion.div>
+      <motion.div
+        layout
+        className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+      >
+        {animeList.map((anime, index) => (
+          <AnimeCard
+            key={`${anime.mal_id}-${index}`}
+            anime={anime}
+            onClick={() => {
+              saveScrollPosition();
+              navigate(`/anime/${anime.mal_id}`);
+            }}
+          />
+        ))}
+      </motion.div>
 
       {hasNextPage &&
         (isFetchingNextPage ? (

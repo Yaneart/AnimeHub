@@ -105,7 +105,7 @@ export function useAnimeFilters() {
     setMinEpisodesInput("");
     setMaxEpisodesInput("");
     setSfw(true);
-  
+
     setSearchParams({}, { replace: true });
   };
 

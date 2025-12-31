@@ -82,7 +82,7 @@ export function AnimeFilters({
   return (
     <section className="mb-10 space-y-6">
       <input
-        className="w-full rounded-2xl bg-white/5 px-6 py-4 text-base backdrop-blur outline-none placeholder:text-slate-400   focus-visible:ring-2 focus-visible:ring-slate-400"
+        className="w-full rounded-2xl bg-white/5 px-6 py-4 text-base backdrop-blur outline-none placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-slate-400"
         placeholder={`🔍${t("search")}`}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -180,10 +180,11 @@ export function AnimeFilters({
                           : [...genres, g.mal_id]
                       )
                     }
-                    className={`rounded-full px-3 py-1 text-xs transition ${active
-                      ? "bg-cyan-400 text-black"
-                      : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
-                      } `}
+                    className={`rounded-full px-3 py-1 text-xs transition ${
+                      active
+                        ? "bg-cyan-400 text-black"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
+                    } `}
                   >
                     {g.name}
                   </button>
