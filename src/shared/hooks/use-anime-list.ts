@@ -1,19 +1,8 @@
 import { useInfiniteScroll } from "./use-infinite-scroll";
 import { useAnimeCatalog } from "../../entities/anime/queries/useAnimeCatalog";
+import type { AnimeFilters } from "../../entities/anime/model/filters";
 
-interface Options {
-  enabled?: boolean;
-}
-
-export function useAnimeList(
-  filters: {
-    query?: string;
-    year?: number;
-    minScore?: number;
-    genres?: number[];
-  },
-  options?: Options
-) {
+export function useAnimeList(filters: AnimeFilters) {
   const {
     data,
     fetchNextPage,

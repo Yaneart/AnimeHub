@@ -1,7 +1,6 @@
 import { http } from "../../../shared/api/http";
 import { type Anime, type GetAnimeListParams } from "../types";
-import { type AnimeFilters } from "../model/filters";
-import { buildAnimeParams } from "./buildAnimeParams";
+import { buildAnimeParams, type AnimeQueryParams } from "./buildAnimeParams";
 
 interface AnimeListResponse {
   data: Anime[];
@@ -44,9 +43,15 @@ export function getRandomAnime() {
   return http<{ data: { mal_id: number } }>("/random/anime");
 }
 
-export async function getRandomAnimeByFilter(filters: AnimeFilters) {
+export async function getRandomAnimeByFilter(
+  params: Omit<AnimeQueryParams, "page">
+) {
   const page = Math.floor(Math.random() * 5) + 1;
-  const query = buildAnimeParams({ ...filters, page });
+
+  const query = buildAnimeParams({
+    ...params,
+    page,
+  });
 
   const response = await http<{ data: Anime[] }>(`/anime?${query}`);
 

@@ -16,34 +16,7 @@ export function AnimeListPage() {
     restoreScrollPosition();
   }, []);
 
-  const {
-    search,
-    year,
-    minScore,
-    genres,
-    orderBy,
-    sort,
-    status,
-    type,
-    minEpisodesInput,
-    maxEpisodesInput,
-    sfw,
-
-    setSearch,
-    setYear,
-    setMinScore,
-    setGenres,
-    setOrderBy,
-    setSort,
-    setStatus,
-    setType,
-    setMinEpisodesInput,
-    setMaxEpisodesInput,
-    setSfw,
-
-    resetFilters,
-    filters,
-  } = useAnimeFilters();
+  const { state, set, resetFilters, filters } = useAnimeFilters();
 
   const {
     data,
@@ -53,7 +26,7 @@ export function AnimeListPage() {
     hasNextPage,
     loadMoreRef,
     isEmpty,
-  } = useAnimeList(filters);
+  } = useAnimeList(state);
 
   const { mutate, isPending } = useRandomAnimeByFilters(filters);
 
@@ -84,28 +57,8 @@ export function AnimeListPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 text-slate-900 dark:text-slate-100">
       <AnimeFilters
-        search={search}
-        year={year}
-        minScore={minScore}
-        genres={genres}
-        orderBy={orderBy}
-        sort={sort}
-        status={status}
-        type={type}
-        minEpisodesInput={minEpisodesInput}
-        maxEpisodesInput={maxEpisodesInput}
-        sfw={sfw}
-        setSearch={setSearch}
-        setYear={setYear}
-        setMinScore={setMinScore}
-        setGenres={setGenres}
-        setOrderBy={setOrderBy}
-        setSort={setSort}
-        setStatus={setStatus}
-        setType={setType}
-        setMinEpisodesInput={setMinEpisodesInput}
-        setMaxEpisodesInput={setMaxEpisodesInput}
-        setSfw={setSfw}
+        state={state}
+        set={set}
         resetFilters={resetFilters}
         onRandom={handleClick}
         isRandomPending={isPending}

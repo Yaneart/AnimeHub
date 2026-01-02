@@ -1,140 +1,70 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "./use-debounce";
-import type { AnimeStatus, AnimeType } from "../types/anime-filters";
-import type { OrderBy, Sort } from "../../pages/anime-filters/AnimeFilters";
+import {
+  filtersReducer,
+  initialAnimeFilters,
+  type AnimeFilters,
+} from "../../entities/anime/model/filters";
 
 export function useAnimeFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const initialSearch = searchParams.get("q") ?? "";
-  const initialYear = searchParams.get("year");
-  const initialMinScore = searchParams.get("score");
-  const initialGenres =
-    searchParams.get("genres")?.split(",").map(Number).filter(Boolean) ?? [];
-
-  const [search, setSearch] = useState(initialSearch);
-  const [year, setYear] = useState<number | null>(
-    initialYear ? Number(initialYear) : null
-  );
-  const [minScore, setMinScore] = useState<number | null>(
-    initialMinScore ? Number(initialMinScore) : null
-  );
-  const [genres, setGenres] = useState<number[]>(initialGenres);
-
-  const [orderBy, setOrderBy] = useState<OrderBy>(
-    (searchParams.get("orderBy") as OrderBy) ?? "score"
-  );
-  const [sort, setSort] = useState<Sort>(
-    (searchParams.get("sort") as Sort) ?? "desc"
+  const [state, dispatch] = useReducer(
+    filtersReducer,
+    initialAnimeFilters,
+    (initial) => ({
+      ...initial,
+      search: searchParams.get("q") ?? "",
+      year: searchParams.get("year") ? Number(searchParams.get("year")) : null,
+      minScore: searchParams.get("score")
+        ? Number(searchParams.get("score"))
+        : null,
+      genres:
+        searchParams.get("genres")?.split(",").map(Number).filter(Boolean) ??
+        [],
+      sfw: searchParams.get("sfw") === "1",
+    })
   );
 
-  const [status, setStatus] = useState<AnimeStatus | undefined>(
-    (searchParams.get("status") as AnimeStatus) || undefined
-  );
-  const [type, setType] = useState<AnimeType | undefined>(
-    (searchParams.get("type") as AnimeType) || undefined
-  );
-  const [minEpisodesInput, setMinEpisodesInput] = useState("");
-  const [maxEpisodesInput, setMaxEpisodesInput] = useState("");
-  const [sfw, setSfw] = useState(searchParams.get("sfw") === "1");
-
-  const debouncedMinEpisodes = useDebounce(minEpisodesInput, 500);
-  const debouncedMaxEpisodes = useDebounce(maxEpisodesInput, 500);
-
-  const minEpisodes = debouncedMinEpisodes
-    ? Number(debouncedMinEpisodes)
-    : undefined;
-
-  const maxEpisodes = debouncedMaxEpisodes
-    ? Number(debouncedMaxEpisodes)
-    : undefined;
-
-  const debouncedSearch = useDebounce(search);
+  const debouncedSearch = useDebounce(state.search, 500);
+  const minEpisodes = useDebounce(state.minEpisodesInput, 500);
+  const maxEpisodes = useDebounce(state.maxEpisodesInput, 500);
 
   useEffect(() => {
     const params: Record<string, string> = {};
 
-    if (search) params.q = search;
-    if (year) params.year = String(year);
-    if (minScore) params.score = String(minScore);
-    if (genres.length) params.genres = genres.join(",");
-    if (sfw) params.sfw = "1";
-    if (orderBy !== "score") params.orderBy = orderBy;
-    if (sort !== "desc") params.sort = sort;
-    if (status) params.status = status;
-    if (type) params.type = type;
+    if (state.search) params.q = state.search;
+    if (state.year) params.year = String(state.year);
+    if (state.minScore) params.score = String(state.minScore);
+    if (state.genres.length) params.genres = state.genres.join(",");
+    if (state.sfw) params.sfw = "1";
+    if (state.orderBy !== "score") params.orderBy = state.orderBy;
+    if (state.sort !== "desc") params.sort = state.sort;
+    if (state.status) params.status = state.status;
+    if (state.type) params.type = state.type;
 
     setSearchParams(params, { replace: true });
-  }, [
-    search,
-    year,
-    minScore,
-    genres,
-    setSearchParams,
-    sfw,
-    orderBy,
-    sort,
-    status,
-    type,
-  ]);
+  }, [state, setSearchParams]);
 
   const filters = {
     query: debouncedSearch.length > 2 ? debouncedSearch : undefined,
-    year: year ?? undefined,
-    minScore: minScore ?? undefined,
-    genres,
-    orderBy,
-    sort,
-    status,
-    type,
-    minEpisodes,
-    maxEpisodes,
-    sfw,
-  };
-
-  const resetFilters = () => {
-    setSearch("");
-    setYear(null);
-    setMinScore(null);
-    setGenres([]);
-    setOrderBy("score");
-    setSort("desc");
-    setStatus(undefined);
-    setType(undefined);
-    setMinEpisodesInput("");
-    setMaxEpisodesInput("");
-    setSfw(true);
-
-    setSearchParams({}, { replace: true });
+    year: state.year ?? undefined,
+    minScore: state.minScore ?? undefined,
+    genres: state.genres,
+    orderBy: state.orderBy,
+    sort: state.sort,
+    status: state.status,
+    type: state.type,
+    minEpisodes: minEpisodes ? Number(minEpisodes) : undefined,
+    maxEpisodes: maxEpisodes ? Number(maxEpisodes) : undefined,
+    sfw: state.sfw,
   };
 
   return {
-    search,
-    year,
-    minScore,
-    genres,
-    orderBy,
-    sort,
-    status,
-    type,
-    minEpisodesInput,
-    maxEpisodesInput,
-    sfw,
-
-    setSearch,
-    setYear,
-    setMinScore,
-    setGenres,
-    setOrderBy,
-    setSort,
-    setStatus,
-    setType,
-    setMinEpisodesInput,
-    setMaxEpisodesInput,
-    setSfw,
-
-    resetFilters,
+    state,
     filters,
+    set: (payload: Partial<AnimeFilters>) => dispatch({ type: "SET", payload }),
+    resetFilters: () => dispatch({ type: "RESET" }),
   };
 }

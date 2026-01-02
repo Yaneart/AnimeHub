@@ -1,12 +1,12 @@
-import type { AnimeFilters } from "./filters";
+import type { AnimeQueryParams } from "../api/buildAnimeParams";
 
 export const animeKeys = {
   all: ["anime"] as const,
 
-  catalog: (filters: AnimeFilters) =>
-    [...animeKeys.all, "catalog", filters] as const,
+  catalog: (params: Omit<AnimeQueryParams, "page">) =>
+    [...animeKeys.all, "catalog", params] as const,
 
-  byId: (id: number) => [...animeKeys.all, "detail", id] as const,
+  byId: (id: number) => [...animeKeys.all, "byId", id] as const,
 
   genres: () => [...animeKeys.all, "genres"] as const,
 
