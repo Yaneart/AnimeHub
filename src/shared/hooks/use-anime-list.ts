@@ -1,5 +1,5 @@
 import { useInfiniteScroll } from "./use-infinite-scroll";
-import { useAnimeCatalog } from "../../entities/anime/hooks";
+import { useAnimeCatalog } from "../../entities/anime/queries/useAnimeCatalog";
 
 interface Options {
   enabled?: boolean;

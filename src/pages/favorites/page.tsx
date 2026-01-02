@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useFavoritesAnime } from "../../entities/anime/hooks";
+import { useFavoritesAnime } from "../../entities/anime/queries/useFavoritesAnime";
 import { AnimeCard } from "../../entities/anime/ui/anime-card";
 import { useFavoritesStore } from "../../shared/store/favorites.store";
 

@@ -1,14 +1,16 @@
-import { Link, useLocation } from "react-router-dom";
-import { useRandomAnime } from "../../../entities/anime/hooks";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useRandomAnime } from "../../../entities/anime/mutations/useRandomAnime";
 import { ThemeToggle } from "./ThemeToggle";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n/index";
+import toast from "react-hot-toast";
 
 export function Header() {
   const { pathname } = useLocation();
-  const { mutate: openRandom, isPending } = useRandomAnime();
+  const { mutate, isPending } = useRandomAnime();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const linkClass = useCallback(
     (path: string) =>
@@ -19,6 +21,21 @@ export function Header() {
       }`,
     [pathname]
   );
+
+  const handleClick = () => {
+    toast.loading("Ищем...", { id: "random" });
+  
+    mutate(undefined, {
+      onSuccess: (res) => {
+        toast.success("Нашли!", { id: "random" });
+        navigate(`/anime/${res.data.mal_id}`);
+      },
+      onError: () => {
+        toast.error("Ошибка", { id: "random" });
+      },
+    });
+  };
+  
 
   const changeLang = (lng: "ru" | "en") => {
     i18n.changeLanguage(lng);
@@ -70,7 +87,7 @@ export function Header() {
 
         <div className="ml-auto flex items-center gap-2">
           <button
-            onClick={() => openRandom()}
+            onClick={handleClick}
             disabled={isPending}
             className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-slate-900 transition hover:bg-gray-400 active:scale-95 disabled:opacity-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800"
           >

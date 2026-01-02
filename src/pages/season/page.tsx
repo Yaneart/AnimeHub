@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSeasonAnime } from "../../entities/anime/hooks";
+import { useSeasonAnime } from "../../entities/anime/queries/useSeasonAnime";
 import { AnimeCard } from "../../entities/anime/ui/anime-card";
 import { saveScrollPosition } from "../../shared/lib/scroll";
 import { useNavigate } from "react-router-dom";

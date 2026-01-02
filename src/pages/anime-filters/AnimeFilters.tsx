@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../shared/button/button";
-import { useAnimeGenres } from "../../entities/anime/hooks";
+import { useAnimeGenres } from "../../entities/anime/queries/useAnimeGenres";
 import type { AnimeStatus, AnimeType } from "../../shared/types/anime-filters";
 import { SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";

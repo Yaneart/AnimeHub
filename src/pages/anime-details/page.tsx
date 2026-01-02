@@ -1,11 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import {
-  useAnimeById,
-  useAnimePictures,
-  useAnimeRecommendations,
-} from "../../entities/anime/hooks";
+import { useAnimeById } from "../../entities/anime/queries/useAnimeById";
+import { useAnimePictures } from "../../entities/anime/queries/useAnimePictures";
+import { useAnimeRecommendations } from "../../entities/anime/queries/useAnimeRecommendations";
 
 import { Skeleton } from "../../shared/ui/skeleton/skeleton";
 import { Button } from "../../shared/button/button";
