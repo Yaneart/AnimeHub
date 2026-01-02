@@ -1,41 +1,36 @@
-import { useCallback, useRef } from "react";
-
-interface Props {
-  enabled?: boolean;
-  hasNextPage?: boolean;
-  isFetchingNextPage: boolean;
-  fetchNextPage: () => void;
-}
+import { useEffect, useRef } from "react";
 
 export function useInfiniteScroll({
-  enabled = true,
-  hasNextPage,
-  isFetchingNextPage,
-  fetchNextPage,
-}: Props) {
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  onLoadMore,
+  enabled,
+  isFetching,
+}: {
+  onLoadMore: () => void;
+  enabled: boolean;
+  isFetching: boolean;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const isLoadingRef = useRef(false);
 
-  const loadMoreRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (!enabled) return;
+  useEffect(() => {
+    if (!enabled || !ref.current) return;
 
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !isLoadingRef.current) {
+        isLoadingRef.current = true;
+        onLoadMore();
       }
+    });
 
-      if (!node || !hasNextPage) return;
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [enabled, onLoadMore]);
 
-      observerRef.current = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      });
+  useEffect(() => {
+    if (!isFetching) {
+      isLoadingRef.current = false;
+    }
+  }, [isFetching]);
 
-      observerRef.current.observe(node);
-    },
-    [enabled, hasNextPage, isFetchingNextPage, fetchNextPage]
-  );
-
-  return loadMoreRef;
+  return ref;
 }

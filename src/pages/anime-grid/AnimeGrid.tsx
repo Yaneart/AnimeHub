@@ -3,6 +3,7 @@ import { AnimeCard } from "../../entities/anime/ui/anime-card";
 import { AnimeCardSkeleton } from "../../entities/anime/ui/anime-card-skeleton";
 import { saveScrollPosition } from "../../shared/lib/scroll";
 import { motion } from "framer-motion";
+import type { RefObject } from "react";
 
 interface Props {
   data:
@@ -15,7 +16,7 @@ interface Props {
 
   hasNextPage: boolean | undefined;
   isFetchingNextPage: boolean;
-  loadMoreRef: (node: HTMLDivElement | null) => void;
+  loadMoreRef: RefObject<HTMLDivElement | null>;
 }
 
 export function AnimeGrid({
@@ -50,8 +51,8 @@ export function AnimeGrid({
 
       {hasNextPage &&
         (isFetchingNextPage ? (
-          <div className="mt-4">
-            {Array.from({ length: 4 }).map((_, i) => (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {Array.from({ length: 10 }).map((_, i) => (
               <AnimeCardSkeleton key={i} />
             ))}
           </div>

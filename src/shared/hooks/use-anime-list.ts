@@ -24,10 +24,9 @@ export function useAnimeList(
   } = useAnimeCatalog(filters);
 
   const loadMoreRef = useInfiniteScroll({
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-    enabled: options?.enabled ?? true,
+    onLoadMore: fetchNextPage,
+    enabled: hasNextPage && !isFetchingNextPage,
+    isFetching: isFetchingNextPage,
   });
 
   const isEmpty = Boolean(
