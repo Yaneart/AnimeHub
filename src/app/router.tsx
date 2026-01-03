@@ -27,10 +27,11 @@ const router = createBrowserRouter(
           element: <SeasonPage />,
         },
       ],
+      
     },
   ],
   {
-    basename: "/AnimeHub",
+    basename: "/AnimeHub/",
   }
 );
 

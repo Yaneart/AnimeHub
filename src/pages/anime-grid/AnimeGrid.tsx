@@ -4,6 +4,8 @@ import { AnimeCardSkeleton } from "../../entities/anime/ui/anime-card-skeleton";
 import { saveScrollPosition } from "../../shared/lib/scroll";
 import { motion } from "framer-motion";
 import type { RefObject } from "react";
+import { useTranslation } from "react-i18next";
+import { EmptyState } from "../../shared/ui/empty-state";
 
 interface Props {
   data:
@@ -26,10 +28,21 @@ export function AnimeGrid({
   loadMoreRef,
 }: Props) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const animeList =
     data?.pages.flatMap((page) =>
       Array.isArray(page.data) ? page.data : []
     ) ?? [];
+
+  if (!isFetchingNextPage && animeList.length === 0) {
+    return (
+      <EmptyState
+        title={t("noResultsTitle")}
+        description={t("noResultsDescription")}
+      />
+    );
+  }
 
   return (
     <>
@@ -39,8 +52,8 @@ export function AnimeGrid({
       >
         {animeList.map((anime, index) => (
           <AnimeCard
-            key={`${anime.mal_id}-${index}`}
             anime={anime}
+            key={`${anime.mal_id}-${index}`}
             onClick={() => {
               saveScrollPosition();
               navigate(`/anime/${anime.mal_id}`);

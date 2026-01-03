@@ -4,6 +4,8 @@ import { AnimeCard } from "../../entities/anime/ui/anime-card";
 import { saveScrollPosition } from "../../shared/lib/scroll";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { AnimeListPageSkeleton } from "../../entities/anime/ui/anime-list-page-skeleton";
+import { ErrorState } from "../../shared/ui/error-state/ErrorState";
 
 const SEASONS = [
   { value: "spring", label: "🌸" },
@@ -35,11 +37,11 @@ export function SeasonPage() {
   const { data, isLoading, isError } = useSeasonAnime(year, season);
 
   if (isLoading) {
-    return <div className="p-6">{t("loading")}</div>;
+    return <AnimeListPageSkeleton />;
   }
 
   if (isError) {
-    return <div className="p-6">{t("loading error")}😢</div>;
+    return <ErrorState message={t("loading error")} />;
   }
 
   const list = data?.data ?? [];
@@ -81,7 +83,7 @@ export function SeasonPage() {
         <div className="text-slate-500">{t("nothing found")}😢</div>
       )}
 
-      <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">
+      <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {list.map((anime) => (
           <AnimeCard
             key={anime.mal_id}

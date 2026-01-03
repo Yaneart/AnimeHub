@@ -3,13 +3,14 @@ import { useAnimeFilters } from "../../shared/hooks/use-anime-filters";
 import { restoreScrollPosition } from "../../shared/lib/scroll";
 
 import { useRandomAnimeByFilters } from "../../entities/anime/mutations/useRandomAnimeByFilters";
-import { AnimeCardSkeleton } from "../../entities/anime/ui/anime-card-skeleton";
 import { useAnimeList } from "../../shared/hooks/use-anime-list";
 import { AnimeFilters } from "../anime-filters/AnimeFilters";
 import { AnimeGrid } from "../anime-grid/AnimeGrid";
 import { ErrorState } from "../../shared/ui/error-state/ErrorState";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { AnimeListPageSkeleton } from "../../entities/anime/ui/anime-list-page-skeleton";
+import { useTranslation } from "react-i18next";
 
 export function AnimeListPage() {
   useEffect(() => {
@@ -17,6 +18,7 @@ export function AnimeListPage() {
   }, []);
 
   const { state, set, resetFilters, filters } = useAnimeFilters();
+  const { t } = useTranslation();
 
   const {
     data,
@@ -51,7 +53,11 @@ export function AnimeListPage() {
   };
 
   if (isError) {
-    return <ErrorState message="Не удалось загрузить данные 😢" />;
+    return <ErrorState message={t("loading error")} />;
+  }
+
+  if (isLoading) {
+    return <AnimeListPageSkeleton />;
   }
 
   return (
@@ -70,20 +76,12 @@ export function AnimeListPage() {
         </div>
       )}
 
-      {isLoading ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <AnimeCardSkeleton key={i} />
-          ))}
-        </div>
-      ) : (
-        <AnimeGrid
-          data={data}
-          hasNextPage={hasNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          loadMoreRef={loadMoreRef}
-        />
-      )}
+      <AnimeGrid
+        data={data}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        loadMoreRef={loadMoreRef}
+      />
     </div>
   );
 }
